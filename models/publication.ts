@@ -18,7 +18,7 @@ const PublicationSchema = new Schema(
     status: {
       type: String,
       required: true,
-      enum: ["draft", "published", "archived"],
+      enum: ["published", "archived"],
     },
     createdBy: { type: CreatedBySchema, required: true }
   },
