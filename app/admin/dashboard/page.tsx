@@ -8,7 +8,9 @@ import {
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { Plus, SearchIcon } from "lucide-react";
+import { Plus, SearchIcon, PieChart, Calendar } from "lucide-react";
+import CategoryChart from "@/components/CategoryChart";
+import CategoryListWithScroll from "@/components/CategoryListWithScroll";
 
 function capitalize(text: string) {
     return text.charAt(0).toUpperCase() + text.slice(1);
@@ -27,14 +29,26 @@ export default function Dashboard() {
         thisMonth: 0,
     });
 
-    // Podemos usar um service futuramente para abstrair a chamada API
+    const [categories, setCategories] = useState<
+        { category: string; count: number; percent: number }[]
+    >([]);
+
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         async function loadData() {
             try {
+                setLoading(true);
                 const res = await fetch("/api/publications", {
-                    method: "GET",
                     cache: "no-store",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
                 });
+
+                if (!res.ok) {
+                    throw new Error('Falha ao carregar dados');
+                }
 
                 const data = await res.json();
 
@@ -53,8 +67,27 @@ export default function Dashboard() {
 
                 setStats({ total, active, archived, thisMonth });
 
-            } catch (error) {
-                console.error("Erro ao carregar dados:", error);
+                const countMap: Record<string, number> = {};
+
+                data.forEach((p: any) => {
+                    const category = p.category || 'Sem Categoria';
+                    countMap[category] = (countMap[category] || 0) + 1;
+                });
+
+                const categoryArray = Object.entries(countMap).map(
+                    ([category, count]) => ({
+                        category,
+                        count,
+                        percent: total > 0 ? (count / total) * 100 : 0,
+                    })
+                ).sort((a, b) => b.percent - a.percent);
+
+                setCategories(categoryArray);
+            } catch (err) {
+                console.error("Erro ao carregar dados:", err);
+                setCategories([]);
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -64,7 +97,6 @@ export default function Dashboard() {
     return (
         <div className="flex justify-center min-h-screen bg-[#F7F4FF] px-4">
             <main className="w-[80%]">
-                
                 <header className="flex flex-col lg:flex-row lg:justify-between gap-6 mt-8">
                     <div className="flex-1">
                         <p className="text-lg text-[#929292] mb-2">{todayFormatted}</p>
@@ -76,8 +108,8 @@ export default function Dashboard() {
 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 lg:w-[40%]">
                         <InputGroup className="bg-white border border-[#AEAEAE]">
-                            <InputGroupInput 
-                                placeholder="Pesquisar publicações"  
+                            <InputGroupInput
+                                placeholder="Pesquisar publicações"
                                 className="placeholder:text-[#AEAEAE]"
                             />
                             <InputGroupAddon>
@@ -92,12 +124,62 @@ export default function Dashboard() {
                     </div>
                 </header>
 
-                <PublicationsStatus
-                    total={stats.total}
-                    active={stats.active}
-                    archived={stats.archived}
-                    thisMonth={stats.thisMonth}
-                />
+                <div className="mb-12">
+                    <PublicationsStatus
+                        total={stats.total}
+                        active={stats.active}
+                        archived={stats.archived}
+                        thisMonth={stats.thisMonth}
+                    />
+                </div>
+
+                <div className="bg-white border border-[#AEAEAE] rounded-xl p-8 mb-8">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4 ">
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                                <PieChart className="w-7 h-7 text-[#5421CD]" />
+                                Análise de Categorias
+                            </h2>
+                            <p className="text-gray-600 mt-2">
+                                Distribuição percentual das publicações por categoria
+                            </p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-10 mt-4 lg:mt-0">
+                            <div className="text-gray-600">
+                                {categories.length} Categorias
+                            </div>
+                            <Button className="w-full sm:w-auto" variant="purple" size="lg">
+                                Adicionar Categoria
+                                <Plus />
+                            </Button>
+                        </div>
+                    </div>
+
+                    {loading ? (
+                        <div className="flex justify-center items-center h-64">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5421CD]"></div>
+                        </div>
+                    ) : categories.length > 0 ? (
+                        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 items-stretch">
+
+                            <CategoryListWithScroll categories={categories} />
+
+                            <div className="flex flex-col h-full">
+                                <CategoryChart data={categories} />
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="text-center py-12">
+                            <PieChart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                            <h3 className="text-xl font-semibold text-gray-500 mb-2">
+                                Nenhuma categoria encontrada
+                            </h3>
+                            <p className="text-gray-400">
+                                Comece adicionando suas primeiras publicações
+                            </p>
+                        </div>
+                    )}
+                </div>
             </main>
         </div>
     );
