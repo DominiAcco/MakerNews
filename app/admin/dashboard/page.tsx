@@ -8,7 +8,7 @@ import {
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { Plus, SearchIcon, PieChart } from "lucide-react";
+import { Plus, SearchIcon, PieChart, Calendar } from "lucide-react";
 import CategoryChart from "@/components/CategoryChart";
 import CategoryListWithScroll from "@/components/CategoryListWithScroll";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
@@ -102,7 +102,11 @@ export default function Dashboard() {
             <main className="w-[80%]">
                 <header className="flex flex-col lg:flex-row lg:justify-between gap-6 mt-8">
                     <div className="flex-1">
-                        <p className="text-lg text-[#929292] mb-2">{todayFormatted}</p>
+                        <div className="flex">
+                            <Calendar className="inline w-6 h-6 text-[#929292] mr-2" />
+                            <p className="text-lg text-[#929292] mb-2">{todayFormatted}</p>
+                        </div>
+                        
                         <h1 className="text-4xl font-bold mb-2">Publicações</h1>
                         <p className="text-[#5421CD] text-base">
                             Gerencie e acompanhe todas as suas publicações
@@ -136,7 +140,7 @@ export default function Dashboard() {
                     />
                 </div>
 
-                <div className="bg-white border border-[#AEAEAE] rounded-xl p-8 mb-8">
+                <div className="bg-white border border-[#AEAEAE] rounded-xl p-8 mb-10">
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4 ">
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
@@ -184,22 +188,26 @@ export default function Dashboard() {
                     )}
                 </div>
 
-                <div className="flex gap-6 mb-10 justify-center sm:justify-start">
-                    <NativeSelect className="border border-[#AEAEAE]" >
-                        <NativeSelectOption value="">Todos os Status</NativeSelectOption>
-                        <NativeSelectOption value="published">Publicados</NativeSelectOption>
-                        <NativeSelectOption value="archived">Arquivados</NativeSelectOption>
-                    </NativeSelect>
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-10 text-center">
+                    <h3 className="text-3xl font-bold">Todas as Publicações</h3>
+                    <div className="flex gap-6 justify-center sm:justify-start ">
+                        <NativeSelect className="border border-[#AEAEAE]" >
+                            <NativeSelectOption value="">Todos os Status</NativeSelectOption>
+                            <NativeSelectOption value="published">Publicados</NativeSelectOption>
+                            <NativeSelectOption value="archived">Arquivados</NativeSelectOption>
+                        </NativeSelect>
 
-                    <NativeSelect className="border-[#AEAEAE]">
-                        <NativeSelectOption value="">Todas Categorias</NativeSelectOption>
-                        {categories.map((cat) => (
-                            <NativeSelectOption key={cat.category} value={cat.category}>
-                                {capitalize(cat.category)}
-                            </NativeSelectOption>
-                        ))}
-                    </NativeSelect>
+                        <NativeSelect className="border-[#AEAEAE]">
+                            <NativeSelectOption value="">Todas Categorias</NativeSelectOption>
+                            {categories.map((cat) => (
+                                <NativeSelectOption key={cat.category} value={cat.category}>
+                                    {capitalize(cat.category)}
+                                </NativeSelectOption>
+                            ))}
+                        </NativeSelect>
+                    </div>
                 </div>
+
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {publications.map((pub) => (
