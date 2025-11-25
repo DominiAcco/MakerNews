@@ -1,7 +1,7 @@
 "use client";
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { CATEGORY_COLORS } from "@/components/colors";
+import { getCategoryColor } from "@/components/colors";
 import { Category } from "@/types/category";
 
 interface Props {
@@ -83,7 +83,7 @@ export default function CategoryChart({ data }: Props) {
                         {data.map((entry, index) => (
                             <Cell
                                 key={`cell-${index}`}
-                                fill={CATEGORY_COLORS[index % CATEGORY_COLORS.length]}
+                                fill={getCategoryColor(entry.category)}
                                 stroke="#FFFFFF"
                                 strokeWidth={2}
                                 className="hover:opacity-80 transition-opacity cursor-pointer"

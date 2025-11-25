@@ -1,14 +1,31 @@
-export const CATEGORY_COLORS = [
-  "#5421CD",
-  "#7B3FF2",
-  "#9F6BFF",
-  "#C8B6FF",
-  "#3B82F6",
-  "#0EA5E9",
-  "#10B981",
-  "#14B8A6",
-  "#64748B",
-  "#475569",
-  "#8B5CF6",
-  "#A78BFA"
+const categoryColorMap = new Map<string, string>();
+
+const coldHueRanges = [
+  [200, 230],
+  [230, 260],
+  [260, 290],
+  [170, 200],
 ];
+
+export function getCategoryColor(category: string) {
+  if (categoryColorMap.has(category)) {
+    return categoryColorMap.get(category)!;
+  }
+
+  const index = categoryColorMap.size;
+  const rangeIndex = index % coldHueRanges.length;
+
+  const [minHue, maxHue] = coldHueRanges[rangeIndex];
+
+  const rangeSize = maxHue - minHue;
+  const hue = minHue + (index * 13) % rangeSize; 
+
+  const saturation = 65;
+  const lightness = 45;
+
+  const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+
+  categoryColorMap.set(category, color);
+
+  return color;
+}

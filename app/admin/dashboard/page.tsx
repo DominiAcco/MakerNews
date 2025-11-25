@@ -8,14 +8,14 @@ import {
     InputGroupAddon,
     InputGroupInput,
 } from "@/components/ui/input-group";
-import { Plus, SearchIcon, PieChart, Calendar } from "lucide-react";
+import { Plus, SearchIcon, PieChart } from "lucide-react";
 import CategoryChart from "@/components/CategoryChart";
 import CategoryListWithScroll from "@/components/CategoryListWithScroll";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import PublicationCardDashboard from "@/components/PublicationCardDashboard";
+import type { Publication } from "@/types/publication";
+import { capitalize } from "@/app/utils/capitalize";
 
-function capitalize(text: string) {
-    return text.charAt(0).toUpperCase() + text.slice(1);
-}
 
 export default function Dashboard() {
     const date = new Date();
@@ -34,6 +34,7 @@ export default function Dashboard() {
         { category: string; count: number; percent: number }[]
     >([]);
 
+    const [publications, setPublications] = useState<Publication[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -51,7 +52,8 @@ export default function Dashboard() {
                     throw new Error('Falha ao carregar dados');
                 }
 
-                const data = await res.json();
+                const data: Publication[] = await res.json();
+                setPublications(data);
 
                 const total = data.length;
                 const active = data.filter((p: any) => p.status === "published").length;
@@ -182,8 +184,8 @@ export default function Dashboard() {
                     )}
                 </div>
 
-                <div className="flex gap-6">
-                    <NativeSelect className="border border-[#AEAEAE]">
+                <div className="flex gap-6 mb-10 justify-center sm:justify-start">
+                    <NativeSelect className="border border-[#AEAEAE]" >
                         <NativeSelectOption value="">Todos os Status</NativeSelectOption>
                         <NativeSelectOption value="published">Publicados</NativeSelectOption>
                         <NativeSelectOption value="archived">Arquivados</NativeSelectOption>
@@ -193,13 +195,17 @@ export default function Dashboard() {
                         <NativeSelectOption value="">Todas Categorias</NativeSelectOption>
                         {categories.map((cat) => (
                             <NativeSelectOption key={cat.category} value={cat.category}>
-                                {cat.category.charAt(0).toUpperCase() + cat.category.slice(1)}
+                                {capitalize(cat.category)}
                             </NativeSelectOption>
                         ))}
                     </NativeSelect>
                 </div>
 
-
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {publications.map((pub) => (
+                        <PublicationCardDashboard key={pub._id} publication={pub} />
+                    ))}
+                </div>
             </main>
         </div>
     );
