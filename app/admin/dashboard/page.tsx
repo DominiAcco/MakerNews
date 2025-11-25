@@ -11,6 +11,7 @@ import {
 import { Plus, SearchIcon, PieChart, Calendar } from "lucide-react";
 import CategoryChart from "@/components/CategoryChart";
 import CategoryListWithScroll from "@/components/CategoryListWithScroll";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 
 function capitalize(text: string) {
     return text.charAt(0).toUpperCase() + text.slice(1);
@@ -180,6 +181,25 @@ export default function Dashboard() {
                         </div>
                     )}
                 </div>
+
+                <div className="flex gap-6">
+                    <NativeSelect className="border border-[#AEAEAE]">
+                        <NativeSelectOption value="">Todos os Status</NativeSelectOption>
+                        <NativeSelectOption value="published">Publicados</NativeSelectOption>
+                        <NativeSelectOption value="archived">Arquivados</NativeSelectOption>
+                    </NativeSelect>
+
+                    <NativeSelect className="border-[#AEAEAE]">
+                        <NativeSelectOption value="">Todas Categorias</NativeSelectOption>
+                        {categories.map((cat) => (
+                            <NativeSelectOption key={cat.category} value={cat.category}>
+                                {cat.category.charAt(0).toUpperCase() + cat.category.slice(1)}
+                            </NativeSelectOption>
+                        ))}
+                    </NativeSelect>
+                </div>
+
+
             </main>
         </div>
     );
