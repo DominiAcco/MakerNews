@@ -2,7 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+        
 export default function Home() {
   const router = useRouter();
   return (

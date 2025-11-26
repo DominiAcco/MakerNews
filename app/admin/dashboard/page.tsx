@@ -214,12 +214,12 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {publications.map((pub) => (
                         <PublicationCardDashboard key={pub._id} publication={pub} />
                     ))}
                 </div>
+            
             </main>
         </div>
     );
