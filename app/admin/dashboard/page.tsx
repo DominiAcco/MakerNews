@@ -97,6 +97,16 @@ export default function Dashboard() {
         loadData();
     }, []);
 
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 400); // debounce de 400ms
+
+        return () => clearTimeout(handler);
+    }, [search]);
+
     return (
         <div className="flex justify-center min-h-screen bg-[#F7F4FF] px-4">
             <main className="w-[80%]">
@@ -106,7 +116,7 @@ export default function Dashboard() {
                             <Calendar className="inline w-6 h-6 text-[#929292] mr-2" />
                             <p className="text-lg text-[#929292] mb-2">{todayFormatted}</p>
                         </div>
-                        
+
                         <h1 className="text-4xl font-bold mb-2">Publicações</h1>
                         <p className="text-[#5421CD] text-base">
                             Gerencie e acompanhe todas as suas publicações
@@ -114,17 +124,8 @@ export default function Dashboard() {
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 lg:w-[40%]">
-                        <InputGroup className="bg-white border border-[#AEAEAE]">
-                            <InputGroupInput
-                                placeholder="Pesquisar publicações"
-                                className="placeholder:text-[#AEAEAE]"
-                            />
-                            <InputGroupAddon>
-                                <SearchIcon />
-                            </InputGroupAddon>
-                        </InputGroup>
 
-                        <Button className="w-full sm:w-auto" variant="purple" size="lg">
+                        <Button className="ml-auto sm:w-auto" variant="purple" size="lg">
                             Adicionar
                             <Plus />
                         </Button>
@@ -155,7 +156,7 @@ export default function Dashboard() {
                             <div className="text-gray-600">
                                 {categories.length} Categorias
                             </div>
-                            <Button className="w-full sm:w-auto" variant="purple" size="lg">
+                            <Button className="ml-auto sm:w-auto" variant="purple" size="lg">
                                 Adicionar Categoria
                                 <Plus />
                             </Button>
@@ -204,15 +205,34 @@ export default function Dashboard() {
                                     {capitalize(cat.category)}
                                 </NativeSelectOption>
                             ))}
+                            
                         </NativeSelect>
+                        <InputGroup className="bg-white border border-[#AEAEAE]">
+                            <InputGroupInput
+                                placeholder="Pesquisar publicações"
+                                className="placeholder:text-[#AEAEAE]"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                            <InputGroupAddon>
+                                <SearchIcon />
+                            </InputGroupAddon>
+                        </InputGroup>
                     </div>
                 </div>
 
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {publications.map((pub) => (
-                        <PublicationCardDashboard key={pub._id} publication={pub} />
-                    ))}
+                    {publications
+                        .filter((pub) => {
+                            const term = debouncedSearch.toLowerCase();
+                            return (
+                                pub.title.toLowerCase().includes(term)
+                            );
+                        })
+                        .map((pub) => (
+                            <PublicationCardDashboard key={pub._id} publication={pub} />
+                        ))}
                 </div>
             </main>
         </div>
