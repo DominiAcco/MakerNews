@@ -17,6 +17,7 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form";
+import { toast } from "sonner";
 
 interface Props {
     onClose?: () => void;
@@ -54,17 +55,19 @@ export default function RegisterPublicationForm({
 
             if (!res.ok) {
                 console.error("Erro:", data);
+                toast.error("Erro ao criar publicação!");
                 return;
             }
 
-            console.log("Criado com sucesso:", data);
+            toast.success("Publicação criada com sucesso!");
             onSuccess?.();
             onClose?.();
             methods.reset();
         } catch (err) {
-            console.error("Erro de conexão:", err);
+            toast.error("Erro de conexão. Tente novamente.");
         }
     }
+
 
     return (
         <Form {...methods}>
