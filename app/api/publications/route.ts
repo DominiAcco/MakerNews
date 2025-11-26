@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Publication from "@/models/publication";
+import z, { ZodError } from "zod"
+import { PublicationSchema } from "@/types/publication";
 
 export async function GET() {
   try {
@@ -15,13 +17,32 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    const data = PublicationSchema.parse(body);
     await connectDB();
-    const created = await Publication.create(body);
+    const created = await Publication.create(data);
+
     return NextResponse.json(created, { status: 201 });
+
   } catch (err: any) {
-    if (err.name === "ValidationError") {
-      return NextResponse.json({ error: err.message }, { status: 400 });
+    console.error(err);
+
+    if (err instanceof ZodError) {
+      return NextResponse.json(
+        { errors: z.treeifyError(err) },
+        { status: 400 }
+      );
     }
-    return NextResponse.json({ error: "Erro ao criar publicação" }, { status: 500 });
+    
+    if (err.name === "ValidationError") {
+      return NextResponse.json(
+        { error: err.message },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: "Erro interno ao criar publicação" },
+      { status: 500 }
+    );
   }
 }

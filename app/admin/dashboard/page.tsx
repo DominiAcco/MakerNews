@@ -15,13 +15,18 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import PublicationCardDashboard from "@/components/PublicationCardDashboard";
 import type { Publication } from "@/types/publication";
 import { capitalize } from "@/app/utils/capitalize";
-
+import { DialogHeader } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import RegisterPublicationModal from "@/components/RegisterPublicationModal";
+import { CATEGORIES } from "@/types/categories";
 
 export default function Dashboard() {
     const date = new Date();
     const month = capitalize(date.toLocaleString("pt-BR", { month: "long" }));
     const year = date.getFullYear();
     const todayFormatted = `${month}, ${year}`;
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
 
     const [stats, setStats] = useState({
         total: 0,
@@ -37,64 +42,50 @@ export default function Dashboard() {
     const [publications, setPublications] = useState<Publication[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        async function loadData() {
-            try {
-                setLoading(true);
-                const res = await fetch("/api/publications", {
-                    cache: "no-store",
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
+    async function loadPublications() {
+        try {
+            setLoading(true);
+            const res = await fetch("/api/publications", { cache: "no-store" });
+            if (!res.ok) throw new Error("Falha ao carregar publicações");
+            console.log("carregou")
+            const data: Publication[] = await res.json();
+            setPublications(data);
 
-                if (!res.ok) {
-                    throw new Error('Falha ao carregar dados');
-                }
+            const total = data.length;
+            const active = data.filter(p => p.status === "published").length;
+            const archived = data.filter(p => p.status === "archived").length;
+            const now = new Date();
+            const thisMonth = data.filter(p => {
+                const created = new Date(p.createdAt);
+                return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear();
+            }).length;
 
-                const data: Publication[] = await res.json();
-                setPublications(data);
+            setStats({ total, active, archived, thisMonth });
 
-                const total = data.length;
-                const active = data.filter((p: any) => p.status === "published").length;
-                const archived = data.filter((p: any) => p.status === "archived").length;
+            const countMap: Record<string, number> = {};
+            data.forEach(p => {
+                const category = p.category || "Sem Categoria";
+                countMap[category] = (countMap[category] || 0) + 1;
+            });
 
-                const now = new Date();
-                const thisMonth = data.filter((p: any) => {
-                    const created = new Date(p.createdAt);
-                    return (
-                        created.getMonth() === now.getMonth() &&
-                        created.getFullYear() === now.getFullYear()
-                    );
-                }).length;
+            const categoryArray = Object.entries(countMap)
+                .map(([category, count]) => ({
+                    category,
+                    count,
+                    percent: total > 0 ? (count / total) * 100 : 0,
+                }))
+                .sort((a, b) => b.percent - a.percent);
 
-                setStats({ total, active, archived, thisMonth });
-
-                const countMap: Record<string, number> = {};
-
-                data.forEach((p: any) => {
-                    const category = p.category || 'Sem Categoria';
-                    countMap[category] = (countMap[category] || 0) + 1;
-                });
-
-                const categoryArray = Object.entries(countMap).map(
-                    ([category, count]) => ({
-                        category,
-                        count,
-                        percent: total > 0 ? (count / total) * 100 : 0,
-                    })
-                ).sort((a, b) => b.percent - a.percent);
-
-                setCategories(categoryArray);
-            } catch (err) {
-                console.error("Erro ao carregar dados:", err);
-                setCategories([]);
-            } finally {
-                setLoading(false);
-            }
+            setCategories(categoryArray);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
         }
+    }
 
-        loadData();
+    useEffect(() => {
+        loadPublications();
     }, []);
 
     return (
@@ -106,7 +97,7 @@ export default function Dashboard() {
                             <Calendar className="inline w-6 h-6 text-[#929292] mr-2" />
                             <p className="text-lg text-[#929292] mb-2">{todayFormatted}</p>
                         </div>
-                        
+
                         <h1 className="text-4xl font-bold mb-2">Publicações</h1>
                         <p className="text-[#5421CD] text-base">
                             Gerencie e acompanhe todas as suas publicações
@@ -124,10 +115,25 @@ export default function Dashboard() {
                             </InputGroupAddon>
                         </InputGroup>
 
-                        <Button className="w-full sm:w-auto" variant="purple" size="lg">
-                            Adicionar
-                            <Plus />
-                        </Button>
+                        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button className="w-full sm:w-auto" variant="purple" size="lg">
+                                    Adicionar
+                                    <Plus />
+                                </Button>
+                            </DialogTrigger>
+
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Cadastro de Publicação</DialogTitle>
+                                    <DialogDescription>Formulário de cadastro de nova publicação.</DialogDescription>
+                                </DialogHeader>
+                                <RegisterPublicationModal
+                                    onClose={() => setIsDialogOpen(false)}
+                                    onSuccess={loadPublications}
+                                />
+                            </DialogContent>
+                        </Dialog>
                     </div>
                 </header>
 
@@ -199,9 +205,9 @@ export default function Dashboard() {
 
                         <NativeSelect className="border-[#AEAEAE]">
                             <NativeSelectOption value="">Todas Categorias</NativeSelectOption>
-                            {categories.map((cat) => (
-                                <NativeSelectOption key={cat.category} value={cat.category}>
-                                    {capitalize(cat.category)}
+                            {CATEGORIES.map((cat) => (
+                                <NativeSelectOption key={cat} value={cat}>
+                                    {capitalize(cat)}
                                 </NativeSelectOption>
                             ))}
                         </NativeSelect>
