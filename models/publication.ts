@@ -1,4 +1,3 @@
-// models/Publication.ts
 import mongoose, { Schema, models } from "mongoose";
 
 const CreatedBySchema = new Schema(

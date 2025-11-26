@@ -12,7 +12,6 @@ type MongooseGlobal = {
 };
 
 declare global {
-  // eslint-disable-next-line no-var
   var _mongooseGlobal: MongooseGlobal | undefined;
 }
 
