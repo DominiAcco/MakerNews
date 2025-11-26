@@ -7,7 +7,6 @@
   --font-montserrat: var(--font-montserrat);
 }
 
-/* Classes utilitárias para usar onde quiser */
 .font-lato {
   font-family: var(--font-lato), sans-serif;
 }

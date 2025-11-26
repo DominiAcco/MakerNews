@@ -1,7 +1,6 @@
 import { Publication } from "@/types/publication";
 import { SquarePen, Trash2 } from "lucide-react";
 import Image from "next/image";
-//import { getCategoryColor } from "@/components/colors";
 import { capitalize } from "@/app/utils/capitalize";
 
 interface PublicationCardDashboardProps {
@@ -9,17 +8,6 @@ interface PublicationCardDashboardProps {
 }
 
 export default function PublicationCardDashboard({ publication }: PublicationCardDashboardProps) {
-    //const color = getCategoryColor(publication.category);
-
-/*     function isFromThisMonth(dateString: string) {
-        const date = new Date(dateString);
-        const now = new Date();
-        return (
-            date.getMonth() === now.getMonth() &&
-            date.getFullYear() === now.getFullYear()
-        );
-    }
- */
     return (
         <div className="border border-[#AEAEAE] rounded-xl bg-white overflow-hidden w-full hover:shadow-lg transition-shadow duration-300">
             <div className="relative h-48 sm:h-40 w-full">
@@ -38,15 +26,7 @@ export default function PublicationCardDashboard({ publication }: PublicationCar
                     `}>
                     {publication.status === "published" ? "Publicado" : "Arquivado"}
                 </span>
-            {/*     {isFromThisMonth(publication.createdAt) && (
-                    <span
-                        className="absolute top-5 right-8 sm:right-6 md:right-8 px-4 py-1 text-xs text-[#ffffff]  bg-[#000000] font-bold rounded-full  tracking-wide"
-                    >
-                        Publicado esse mês
-                    </span>
-                )} */}
             </div>
-
 
             <div className="p-4 sm:p-6 md:p-8 min-h-[250px] flex flex-col justify-between">
                 <div className="min-h-28 flex flex-col justify-start">
