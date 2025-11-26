@@ -1,8 +1,12 @@
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
-export default function Home() {
+function App() {
   return (
-    <div>
+    <>
       oi
-    </div>
+    </>
   );
 }
+
+export default App;

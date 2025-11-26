@@ -16,7 +16,6 @@ import PublicationCardDashboard from "@/components/PublicationCardDashboard";
 import type { Publication } from "@/types/publication";
 import { capitalize } from "@/app/utils/capitalize";
 
-
 export default function Dashboard() {
     const date = new Date();
     const month = capitalize(date.toLocaleString("pt-BR", { month: "long" }));
@@ -106,7 +105,7 @@ export default function Dashboard() {
                             <Calendar className="inline w-6 h-6 text-[#929292] mr-2" />
                             <p className="text-lg text-[#929292] mb-2">{todayFormatted}</p>
                         </div>
-                        
+
                         <h1 className="text-4xl font-bold mb-2">Publicações</h1>
                         <p className="text-[#5421CD] text-base">
                             Gerencie e acompanhe todas as suas publicações
@@ -208,12 +207,12 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {publications.map((pub) => (
                         <PublicationCardDashboard key={pub._id} publication={pub} />
                     ))}
                 </div>
+            
             </main>
         </div>
     );
