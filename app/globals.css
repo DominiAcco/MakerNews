@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
+:root {
+  --font-lato: var(--font-lato);
+  --font-montserrat: var(--font-montserrat);
+}
+
+.font-lato {
+  font-family: var(--font-lato), sans-serif;
+}
+
+.font-montserrat {
+  font-family: var(--font-montserrat), sans-serif;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -76,6 +90,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
 }
 
 .dark {
@@ -111,6 +126,9 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
+.recharts-wrapper *:focus {
+    outline: none;
+}
 
 @layer base {
   * {
@@ -118,5 +136,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-lato), sans-serif;
   }
 }
