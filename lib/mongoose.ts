@@ -25,8 +25,6 @@ let cached: MongooseGlobal = globalWithMongoose._mongooseGlobal ?? {
 };
 
 export async function connectDB() {
- console.log("MONGODB_URI:", process.env.MONGODB_URI);
-
   if (cached.conn) {
     return cached.conn;
   }
