@@ -132,10 +132,10 @@ export default function Dashboard() {
                         </p>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 lg:w-[40%]">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center">
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button className="w-full sm:w-auto" variant="purple" size="lg">
+                                <Button className="w-full" variant="purple" size="lg">
                                     Adicionar
                                     <Plus />
                                 </Button>
