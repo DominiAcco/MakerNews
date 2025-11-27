@@ -6,6 +6,7 @@ import Image from "next/image";
 import { capitalize } from "@/utils/capitalize";
 import { useState } from "react";
 import EditPublicationModal from "@/components/EditPublicationModal";
+import DeletePublicationModal from "@/components/DeletePublicationModal"; 
 
 interface PublicationCardDashboardProps {
     publication: PublicationData;
@@ -14,10 +15,16 @@ interface PublicationCardDashboardProps {
 
 export default function PublicationCardDashboard({ publication, onUpdate }: PublicationCardDashboardProps) {
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false); 
 
     function handleEditSuccess() {
         setIsEditOpen(false);
         onUpdate?.();
+    }
+
+    function handleDeleteSuccess() {
+        setIsDeleteOpen(false);
+        onUpdate?.(); 
     }
 
     return (
@@ -66,7 +73,10 @@ export default function PublicationCardDashboard({ publication, onUpdate }: Publ
                             className="w-5 h-5 text-[#AEAEAE] cursor-pointer hover:text-[#5421CD] transition-colors"
                             onClick={() => setIsEditOpen(true)}
                         />
-                        <Trash2 className="w-5 h-5 text-[#AEAEAE] cursor-pointer hover:text-red-500 transition-colors" />
+                        <Trash2
+                            className="w-5 h-5 text-[#AEAEAE] cursor-pointer hover:text-red-500 transition-colors"
+                            onClick={() => setIsDeleteOpen(true)}
+                        />
                     </div>
                 </div>
             </div>
@@ -76,7 +86,16 @@ export default function PublicationCardDashboard({ publication, onUpdate }: Publ
                     publication={publication}
                     open={isEditOpen}
                     onClose={() => setIsEditOpen(false)}
-                    onSuccess={onUpdate} 
+                    onSuccess={handleEditSuccess}
+                />
+            )}
+
+            {isDeleteOpen && (
+                <DeletePublicationModal
+                    publication={publication}
+                    open={isDeleteOpen}
+                    onClose={() => setIsDeleteOpen(false)}
+                    onSuccess={handleDeleteSuccess}
                 />
             )}
         </>

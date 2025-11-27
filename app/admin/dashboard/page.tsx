@@ -34,6 +34,7 @@ import { PublicationService } from "@/service/publicationService";
 import { toast } from "sonner";
 import { getMonthYearFormatted } from "@/utils/date";
 
+
 export default function Dashboard() {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [publications, setPublications] = useState<PublicationData[]>([]);
