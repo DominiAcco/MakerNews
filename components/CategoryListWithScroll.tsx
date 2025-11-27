@@ -1,11 +1,11 @@
 "use client";
 
-import { capitalize } from "@/app/utils/capitalize";
+import { capitalize } from "@/utils/capitalize";
 import { getCategoryColor } from "@/components/colors";
-import { Category } from "@/types/category";
+import { CategoryMetrics } from "@/types/categoryMetrics";
 
 interface CategoryListWithScrollProps {
-    categories: Category[];
+    categories: CategoryMetrics[];
 }
 
 export default function CategoryListWithScroll({ categories }: CategoryListWithScrollProps) {

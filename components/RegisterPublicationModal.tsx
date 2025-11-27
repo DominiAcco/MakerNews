@@ -1,14 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { PublicationSchema, PublicationFormData } from "@/types/publication";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { CATEGORIES } from "@/types/categories";
-import { Textarea } from "./ui/textarea";
-
 import {
     Form,
     FormField,
@@ -17,9 +8,18 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { PublicationSchema, PublicationFormData } from "@/types/publication";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { CATEGORIES } from "@/consts/categories";
+import { Textarea } from "./ui/textarea";
 import { toast } from "sonner";
+import { PublicationService } from "@/service/publicationService";
 
-interface Props {
+interface RegisterPublicationFormProps {
     onClose?: () => void;
     onSuccess?: () => void
 }
@@ -27,7 +27,7 @@ interface Props {
 export default function RegisterPublicationForm({
     onClose,
     onSuccess
-}: Props) {
+}: RegisterPublicationFormProps) {
     const methods = useForm<PublicationFormData>({
         resolver: zodResolver(PublicationSchema),
         defaultValues: {
@@ -35,7 +35,7 @@ export default function RegisterPublicationForm({
             description: "",
             status: "published",
             category: undefined,
-            createdBy: {
+            createdBy: { // Mudar para pegar as infos do admin quando tiver a logica
                 userId: "123",
                 name: "Admin",
                 role: "admin",
@@ -45,34 +45,21 @@ export default function RegisterPublicationForm({
 
     async function onSubmit(values: PublicationFormData) {
         try {
-            const res = await fetch("/api/publications", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                console.error("Erro:", data);
-                toast.error("Erro ao criar publicação!");
-                return;
-            }
-
+            await PublicationService.create(values);
             toast.success("Publicação criada com sucesso!");
             onSuccess?.();
             onClose?.();
             methods.reset();
-        } catch (err) {
-            toast.error("Erro de conexão. Tente novamente.");
+
+        } catch (err: any) {
+            console.error(err);
+            toast.error("Erro ao criar publicação");
         }
     }
-
 
     return (
         <Form {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6">
-
                 <FormField
                     control={methods.control}
                     name="title"
@@ -105,12 +92,12 @@ export default function RegisterPublicationForm({
                     )}
                 />
 
-                <div className="flex justify-between items-start gap-4">
+                <div className="flex justify-between gap-4">
                     <FormField
                         control={methods.control}
                         name="status"
                         render={({ field }) => (
-                            <FormItem className="w-full">
+                            <FormItem>
                                 <FormLabel>Status</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
@@ -133,7 +120,7 @@ export default function RegisterPublicationForm({
                         control={methods.control}
                         name="category"
                         render={({ field }) => (
-                            <FormItem className="w-full">
+                            <FormItem>
                                 <FormLabel>Categoria</FormLabel>
                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                                     <FormControl>
@@ -159,13 +146,18 @@ export default function RegisterPublicationForm({
                 <div className="flex justify-end gap-2">
                     <Button
                         type="button"
-                        variant="outline"
-                        className="bg-red-700 text-white"
+                        variant="light"
+                        className="min-w-30"
                         onClick={() => onClose?.()}
                     >
                         Cancelar
                     </Button>
-                    <Button type="submit">Salvar</Button>
+                    <Button
+                        type="submit"
+                        variant="purple"
+                        className="min-w-30"
+                    >
+                        Salvar</Button>
                 </div>
             </form>
         </Form>

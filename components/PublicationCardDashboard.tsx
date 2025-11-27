@@ -1,7 +1,7 @@
 import { Publication } from "@/types/publication";
 import { SquarePen, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { capitalize } from "@/app/utils/capitalize";
+import { capitalize } from "@/utils/capitalize";
 
 interface PublicationCardDashboardProps {
     publication: Publication
