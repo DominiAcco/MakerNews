@@ -252,7 +252,11 @@ export default function Dashboard() {
                             );
                         })
                         .map((pub) => (
-                            <PublicationCardDashboard key={pub._id} publication={pub} />
+                            <PublicationCardDashboard
+                                key={pub._id}
+                                publication={pub}
+                                onUpdate={seekPublications} 
+                            />
                         ))}
                 </div>
 
