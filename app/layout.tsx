@@ -1,5 +1,6 @@
 import { Lato, Montserrat } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const lato = Lato({
   variable: "--font-lato",
@@ -17,6 +18,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR">
       <body className={`${lato.variable} ${montserrat.variable} antialiased`}>
+        <>
+          <Toaster/>
+        </>
         {children}
       </body>
     </html>

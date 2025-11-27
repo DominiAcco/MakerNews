@@ -2,10 +2,10 @@
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { getCategoryColor } from "@/components/colors";
-import { Category } from "@/types/category";
+import { CategoryMetrics } from "@/types/categoryMetrics";
 
 interface Props {
-    data: Category[];
+    data: CategoryMetrics[];
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
