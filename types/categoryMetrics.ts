@@ -1,4 +1,4 @@
-export interface Category {
+export interface CategoryMetrics {
   category: string;
   count: number;
   percent: number;
