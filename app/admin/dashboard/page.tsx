@@ -106,6 +106,16 @@ export default function Dashboard() {
         seekPublications();
     }, []);
 
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 400);
+
+        return () => clearTimeout(handler);
+    }, [search]);
+
     return (
         <div className="flex justify-center min-h-screen bg-[#F7F4FF] px-4">
             <main className="w-[80%]">
@@ -122,20 +132,10 @@ export default function Dashboard() {
                         </p>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 lg:w-[40%]">
-                        <InputGroup className="bg-white border border-[#AEAEAE]">
-                            <InputGroupInput
-                                placeholder="Pesquisar publicações"
-                                className="placeholder:text-[#AEAEAE]"
-                            />
-                            <InputGroupAddon>
-                                <SearchIcon />
-                            </InputGroupAddon>
-                        </InputGroup>
-
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center">
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
-                                <Button className="w-full sm:w-auto" variant="purple" size="lg">
+                                <Button className="w-full" variant="purple" size="lg">
                                     Adicionar
                                     <Plus />
                                 </Button>
@@ -206,16 +206,33 @@ export default function Dashboard() {
                     )}
                 </div>
 
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0 mb-10 text-center">
-                    <h3 className="text-3xl font-bold">Todas as Publicações</h3>
-                    <div className="flex gap-6 justify-center sm:justify-start ">
-                        <NativeSelect className="border border-[#AEAEAE]" >
+                <div className="flex flex-col lg:flex-row flex-wrap gap-4 lg:gap-6 mb-6 sm:mb-8 lg:mb-10">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full lg:flex-1">
+                        <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold whitespace-nowrap min-w-[200px]">
+                            Todas as Publicações
+                        </h3>
+
+                        <InputGroup className="bg-white border border-[#AEAEAE] w-full sm:flex-1 max-w-lg">
+                            <InputGroupInput
+                                placeholder="Pesquisar publicações"
+                                className="placeholder:text-[#AEAEAE] py-2 sm:py-3 text-sm sm:text-base w-full"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                            <InputGroupAddon className="px-3 sm:px-4">
+                                <SearchIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                            </InputGroupAddon>
+                        </InputGroup>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full lg:w-auto">
+                        <NativeSelect className="border border-[#AEAEAE] w-full sm:w-40 lg:w-44">
                             <NativeSelectOption value="">Todos os Status</NativeSelectOption>
                             <NativeSelectOption value="published">Publicados</NativeSelectOption>
                             <NativeSelectOption value="archived">Arquivados</NativeSelectOption>
                         </NativeSelect>
 
-                        <NativeSelect className="border-[#AEAEAE]">
+                        <NativeSelect className="border border-[#AEAEAE] w-full sm:w-48 lg:w-52">
                             <NativeSelectOption value="">Todas Categorias</NativeSelectOption>
                             {CATEGORIES.map((cat) => (
                                 <NativeSelectOption key={cat} value={cat}>
@@ -227,9 +244,16 @@ export default function Dashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {publications.map((pub) => (
-                        <PublicationCardDashboard key={pub._id} publication={pub} />
-                    ))}
+                    {publications
+                        .filter((pub) => {
+                            const term = debouncedSearch.toLowerCase();
+                            return (
+                                pub.title.toLowerCase().includes(term)
+                            );
+                        })
+                        .map((pub) => (
+                            <PublicationCardDashboard key={pub._id} publication={pub} />
+                        ))}
                 </div>
 
             </main>
