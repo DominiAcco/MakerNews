@@ -38,6 +38,10 @@ export default function Dashboard() {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [publications, setPublications] = useState<PublicationData[]>([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("");
     const [categories, setCategories] = useState<{
         category: string;
         count: number;
@@ -106,8 +110,6 @@ export default function Dashboard() {
         seekPublications();
     }, []);
 
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
     useEffect(() => {
         const handler = setTimeout(() => {
             setDebouncedSearch(search);
@@ -115,6 +117,20 @@ export default function Dashboard() {
 
         return () => clearTimeout(handler);
     }, [search]);
+
+    const filteredPublications = publications.filter((pub) => {
+        const term = debouncedSearch.toLowerCase();
+
+        const matchesSearch = pub.title.toLowerCase().includes(term);
+
+        const matchesStatus = statusFilter ? pub.status === statusFilter : true;
+
+        const matchesCategory = categoryFilter
+            ? pub.category === categoryFilter
+            : true;
+
+        return matchesSearch && matchesStatus && matchesCategory;
+    });
 
     return (
         <div className="flex justify-center min-h-screen bg-[#F7F4FF] px-4">
@@ -226,13 +242,21 @@ export default function Dashboard() {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full lg:w-auto">
-                        <NativeSelect className="border border-[#AEAEAE] w-full sm:w-40 lg:w-44">
+                        <NativeSelect
+                            className="border border-[#AEAEAE] w-full sm:w-40 lg:w-44"
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                        >
                             <NativeSelectOption value="">Todos os Status</NativeSelectOption>
                             <NativeSelectOption value="published">Publicados</NativeSelectOption>
                             <NativeSelectOption value="archived">Arquivados</NativeSelectOption>
                         </NativeSelect>
 
-                        <NativeSelect className="border border-[#AEAEAE] w-full sm:w-48 lg:w-52">
+                        <NativeSelect
+                            className="border border-[#AEAEAE] w-full sm:w-48 lg:w-52"
+                            value={categoryFilter}
+                            onChange={(e) => setCategoryFilter(e.target.value)}
+                        >
                             <NativeSelectOption value="">Todas Categorias</NativeSelectOption>
                             {CATEGORIES.map((cat) => (
                                 <NativeSelectOption key={cat} value={cat}>
@@ -243,19 +267,26 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {publications
-                        .filter((pub) => {
-                            const term = debouncedSearch.toLowerCase();
-                            return (
-                                pub.title.toLowerCase().includes(term)
-                            );
-                        })
-                        .map((pub) => (
-                            <PublicationCardDashboard key={pub._id} publication={pub} />
-                        ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 min-h-[200px]">
+                    {filteredPublications.length > 0 ? (
+                        filteredPublications.map((pub) => (
+                            <PublicationCardDashboard
+                                key={pub._id}
+                                publication={pub}
+                                onUpdate={seekPublications}
+                            />
+                        ))
+                    ) : (
+                        <div className="col-span-full flex flex-col items-center justify-center py-36">
+                            <p className="text-2xl font-semibold text-gray-500 mb-2">
+                                Nenhuma correspondência encontrada
+                            </p>
+                            <p className="text-gray-400 text-lg">
+                                Tente alterar os filtros ou a busca para encontrar publicações.
+                            </p>
+                        </div>
+                    )}
                 </div>
-
             </main>
         </div>
     );

@@ -23,6 +23,21 @@ export const PublicationService = {
             image_url: data.image_url,
         });
         return response.data;
-    }
+    },
+
+    update: async (id: string, data: PublicationFormData): Promise<PublicationData> => {
+        const response = await api.put<PublicationData>(`${RESOURCE}/${id}`, {
+            title: data.title,
+            description: data.description,
+            status: data.status,
+            category: data.category,
+            createdBy: data.createdBy,
+        });
+        return response.data;
+    },
+    delete: async (id: string) => {
+        const { data } = await api.delete(`/publications/${id}`);
+        return data;
+    },
 
 };  
