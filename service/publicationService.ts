@@ -23,7 +23,7 @@ export const PublicationService = {
         });
         return response.data;
     },
-    
+
     update: async (id: string, data: PublicationFormData): Promise<PublicationData> => {
         const response = await api.put<PublicationData>(`${RESOURCE}/${id}`, {
             title: data.title,
@@ -33,6 +33,10 @@ export const PublicationService = {
             createdBy: data.createdBy,
         });
         return response.data;
+    },
+    delete: async (id: string) => {
+        const { data } = await api.delete(`/publications/${id}`);
+        return data;
     },
 
 };  
