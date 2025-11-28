@@ -1,10 +1,10 @@
-import { Publication } from "@/types/publication";
+import { PublicationData } from "@/types/publication";
 import { SquarePen, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { capitalize } from "@/utils/capitalize";
 
 interface PublicationCardDashboardProps {
-    publication: Publication
+    publication: PublicationData
 }
 
 export default function PublicationCardDashboard({ publication }: PublicationCardDashboardProps) {
@@ -12,7 +12,7 @@ export default function PublicationCardDashboard({ publication }: PublicationCar
         <div className="border border-[#AEAEAE] rounded-xl bg-white overflow-hidden w-full hover:shadow-lg transition-shadow duration-300">
             <div className="relative h-48 sm:h-40 w-full">
                 <Image
-                    src="/ImagemCardTeste.png"
+                    src={publication.image_url || "/notFound.png"} 
                     alt={publication.title}
                     fill
                     className="object-cover"

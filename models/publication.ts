@@ -19,7 +19,8 @@ const PublicationSchema = new Schema(
       required: true,
       enum: ["published", "archived"],
     },
-    createdBy: { type: CreatedBySchema, required: true }
+    createdBy: { type: CreatedBySchema, required: true },
+    image_url: { type: String, required: false },
   },
   { timestamps: true }
 );
