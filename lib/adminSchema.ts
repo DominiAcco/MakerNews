@@ -1,0 +1,18 @@
+import { z } from 'zod';
+
+export const adminRegisterSchema = z.object({
+    name: z.string()
+        .min(2, { message: "Nome deve ter pelo menos 2 caracteres" })
+        .max(100, { message: "Nome muito longo" })
+        .regex(/^[a-zA-ZÀ-ÿ\s]+$/, { message: "Nome deve conter apenas letras" }),
+
+    email: z.string()
+        .min(1, { message: "E-mail é obrigatório" })
+        .email({ message: "E-mail inválido" })
+        .max(100, { message: "E-mail muito longo" }),
+
+    password: z.string()
+        .min(6, { message: "Senha deve ter pelo menos 6 caracteres" })
+        .max(100, { message: "Senha muito longa" })
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,{message:"Senha deve conter letra maiúscula, minúscula, número e caractere especial",})
+});
