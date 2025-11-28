@@ -14,12 +14,6 @@ interface PublicationCardDashboardProps {
 
 export default function PublicationCardDashboard({ publication, onUpdate }: PublicationCardDashboardProps) {
     const [isEditOpen, setIsEditOpen] = useState(false);
-
-    function handleEditSuccess() {
-        setIsEditOpen(false);
-        onUpdate?.();
-    }
-
     return (
         <>
             <div className="border border-[#AEAEAE] rounded-xl bg-white overflow-hidden w-full hover:shadow-lg transition-shadow duration-300">
