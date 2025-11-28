@@ -34,11 +34,14 @@ import { PublicationService } from "@/service/publicationService";
 import { toast } from "sonner";
 import { getMonthYearFormatted } from "@/utils/date";
 
-
 export default function Dashboard() {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [publications, setPublications] = useState<PublicationData[]>([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState("");
     const [categories, setCategories] = useState<{
         category: string;
         count: number;
@@ -106,11 +109,6 @@ export default function Dashboard() {
     useEffect(() => {
         seekPublications();
     }, []);
-
-    const [search, setSearch] = useState("");
-    const [debouncedSearch, setDebouncedSearch] = useState("");
-    const [statusFilter, setStatusFilter] = useState("");
-    const [categoryFilter, setCategoryFilter] = useState("");
 
     useEffect(() => {
         const handler = setTimeout(() => {
