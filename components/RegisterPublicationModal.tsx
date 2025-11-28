@@ -53,7 +53,14 @@ export default function RegisterPublicationModal({
     },
   });
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function isAnimatedWebp(file: File): Promise<boolean> {
+    const buffer = await file.arrayBuffer();
+    const bytes = new Uint8Array(buffer);
+    const header = new TextDecoder().decode(bytes);
+    return header.includes("ANIM");
+  }
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -64,6 +71,16 @@ export default function RegisterPublicationModal({
 
     if (!file.type.startsWith("image/")) {
       toast.error("Envie apenas arquivos de imagem.");
+      return;
+    }
+
+    if (file.type === "image/gif") {
+      toast.error("GIF animado não é permitido.");
+      return;
+    }
+
+    if (file.type === "image/webp" && await isAnimatedWebp(file)) {
+      toast.error("Imagens WebP animadas não são permitidas.");
       return;
     }
 
