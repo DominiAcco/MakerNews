@@ -44,11 +44,7 @@ export default function RegisterPublicationModal({
       description: "",
       status: "published",
       category: undefined,
-      createdBy: {
-        userId: "123",
-        name: "Admin",
-        role: "admin",
-      },
+      // ✅ REMOVIDO: createdBy hardcoded - o backend vai adicionar automaticamente
       image_url: ""
     },
   });
@@ -91,28 +87,42 @@ export default function RegisterPublicationModal({
     try {
       setIsSaving(true);
 
+      console.log("📝 Dados do formulário:", values);
+
       let imageUrl = values.image_url;
       if (selectedFile) {
+        console.log("📤 Fazendo upload da imagem...");
         const uploadedUrl = await fileUploadService.uploadImage(selectedFile);
         methods.setValue("image_url", uploadedUrl);
         imageUrl = uploadedUrl;
+        console.log("✅ Imagem upload concluído:", uploadedUrl);
       }
 
-      await PublicationService.create({
-        ...values,
-        image_url: imageUrl,
-      });
+      // ✅ Dados limpos para enviar ao backend
+      const publicationData = {
+        title: values.title,
+        description: values.description,
+        status: values.status,
+        category: values.category,
+        image_url: imageUrl || ""
+        // ❌ NÃO incluir createdBy - o backend vai adicionar automaticamente
+      };
+
+      console.log("📤 Enviando para API:", publicationData);
+      
+      await PublicationService.create(publicationData);
 
       toast.success("Publicação criada com sucesso!");
       onSuccess?.();
       onClose?.();
       methods.reset();
+      setSelectedFile(null);
 
     } catch (err: any) {
-      console.error(err);
-      toast.error("Erro ao criar publicação");
+      console.error("❌ Erro ao criar publicação:", err);
+      toast.error(err.message || "Erro ao criar publicação");
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
   }
 
@@ -150,6 +160,7 @@ export default function RegisterPublicationModal({
             </FormItem>
           )}
         />
+
         <FormField
           control={methods.control}
           name="image_url"

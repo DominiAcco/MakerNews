@@ -33,8 +33,13 @@ import { PublicationData } from "@/types/publication";
 import { PublicationService } from "@/services/publicationService";
 import { toast } from "sonner";
 import { getMonthYearFormatted } from "@/utils/date";
+import { useRouter } from "next/navigation";
+import { authService } from "@/services/authService";
 
 export default function Dashboard() {
+    const router = useRouter();
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+    const [authLoading, setAuthLoading] = useState(true);
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [publications, setPublications] = useState<PublicationData[]>([]);
     const [loading, setLoading] = useState(true);
@@ -55,14 +60,60 @@ export default function Dashboard() {
     });
     const todayFormatted = getMonthYearFormatted();
 
+    useEffect(() => {
+        const checkAuth = async () => {
+            console.log("🔄 Verificando autenticação...");
+            try {
+                const user = await authService.getCurrentUser();
+                console.log("👤 Usuário retornado:", user);
+
+                if (user) {
+                    console.log("✅ Usuário autenticado:", user.email);
+                    setIsAuthenticated(true);
+                } else {
+                    console.log("❌ Usuário não autenticado");
+                    setIsAuthenticated(false);
+                    router.push("/login");
+                }
+            } catch (error) {
+                console.error("❌ Erro na verificação de auth:", error);
+                setIsAuthenticated(false);
+                router.push("/login");
+            } finally {
+                setAuthLoading(false);
+            }
+        };
+
+        checkAuth();
+    }, [router]);
+
+    // Hook para buscar publicações - agora condicional internamente
+    useEffect(() => {
+        if (isAuthenticated) {
+            seekPublications();
+        }
+    }, [isAuthenticated]); // ✅ Execute apenas quando isAuthenticated mudar
+
+    // Hook para debounce
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 400);
+
+        return () => clearTimeout(handler);
+    }, [search]);
+
     const seekPublications = async (): Promise<void> => {
         setLoading(true);
         try {
+            console.log("Buscando publicações...");
             const data = await PublicationService.list();
+            console.log("Publicações recebidas:", data);
             setPublications(data);
             computeStats(data);
             computeCategories(data);
         } catch (err) {
+            console.error("Erro ao carregar publicações:", err);
             toast.error("Erro ao carregar publicações.");
         } finally {
             setLoading(false);
@@ -106,17 +157,7 @@ export default function Dashboard() {
         setCategories(categoryArray);
     }
 
-    useEffect(() => {
-        seekPublications();
-    }, []);
 
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedSearch(search);
-        }, 400);
-
-        return () => clearTimeout(handler);
-    }, [search]);
 
     const filteredPublications = publications.filter((pub) => {
         const term = debouncedSearch.toLowerCase();
@@ -131,6 +172,24 @@ export default function Dashboard() {
 
         return matchesSearch && matchesStatus && matchesCategory;
     });
+    const isLoading = authLoading || (isAuthenticated && loading);
+    if (authLoading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5421CD]"></div>
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-center">
+                    <p className="text-xl text-gray-600">Redirecionando para login...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex justify-center min-h-screen bg-[#F7F4FF] px-4">
@@ -270,11 +329,12 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 min-h-[200px]">
                     {filteredPublications.length > 0 ? (
                         filteredPublications.map((pub) => (
-                            <PublicationCardDashboard
-                                key={pub._id}
-                                publication={pub}
-                                onUpdate={seekPublications}
-                            />
+                            <div key={pub._id} className="publication-card-wrapper">
+                                <PublicationCardDashboard
+                                    publication={pub}
+                                    onUpdate={seekPublications}
+                                />
+                            </div>
                         ))
                     ) : (
                         <div className="col-span-full flex flex-col items-center justify-center py-36">
