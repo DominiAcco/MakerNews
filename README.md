@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+#  Maker News – Plataforma Web de Notícias Maker
 
-## Getting Started
+O **Maker News** é um projeto web desenvolvido pelo primeiro ano do **Sistemas de Informação da UEMS – Unidade de Nova Andradina**.  
+  
+Ele funciona como um portal de notícias focado no universo **maker**, trazendo conteúdos sobre tecnologia, inovação, criatividade, eletrônica e projetos práticos.
+  
+O sistema permite criação, edição, arquivamento e gerenciamento de publicações, oferecendo uma interface moderna, responsiva e totalmente integrada a um backend conectado ao MongoDB.
+Além disso, usuários podem visualizar todas as publicações já criadas, acessando notícias, projetos e conteúdos do universo maker de forma organizada e intuitiva.
+ 
+Em breve, o Maker News também contará com integração para direcionar os usuários a um novo site complementar, onde será possível adquirir itens 3D produzidos em impressoras 3D — um recurso que está em desenvolvimento e ainda não está disponível.
 
-First, run the development server:
 
+---
+
+##  Tecnologias Utilizadas
+
+### **Frontend**
+- **Next.js**
+- **React**
+- **TypeScript**
+- **Tailwind CSS**
+- **ShadCN/UI**
+- **Lucide Icons**
+
+### **Backend**
+- **Node.js**
+- **Next.js API Routes**
+- **MongoDB + Mongoose**
+
+### **Outros**
+- Deploy: **Vercel**
+- Gerenciador de pacotes: **npm**
+- Versionamento: **Git + GitHub**
+
+---
+
+##  Pré-requisitos
+
+Para rodar o projeto localmente, você precisa ter instalado:
+
+- **Node.js 18+** (recomendado para total compatibilidade com Next 14+)
+- **npm** (ou **yarn**/**pnpm** se preferir)
+- **Git**
+- Ter um **MongoDB** disponível (local ou via MongoDB Atlas)
+
+>  **OBS:** O projeto utiliza variáveis de ambiente (`.env.local`) para conectar ao banco de dados. Ajuste o arquivo conforme seu ambiente.
+
+---
+
+##  Como rodar o projeto localmente
+
+1. **Clone o repositório:**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/DominiAcco/MakerNews.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Entre na pasta do projeto:**
+```bash
+cd MakerNews
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Instale as dependências:**
+```bash
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. **Crie o arquivo `.env.local` com suas credenciais MongoDB:**
+```env
+MONGODB_URI=sua-string-de-conexao
+```
 
-## Learn More
+5. **Inicie o servidor de desenvolvimento:**
+```bash
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+6. O projeto estará disponível em:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+##  Versão hospedada (Vercel)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Você também pode acessar o projeto diretamente online:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+ **https://maker-news.vercel.app/**
+
+---
+
+##  Documentação e Wiki
+
+Para detalhes aprofundados sobre:
+
+- Relatórios completos das *sprints*  
+- Documento **Contribute.md** com orientações de contribuição
+
+Acesse diretamente pela aba **Wiki** do GitHub do projeto.
+
+##  Contribuições
+
+Toda orientação necessária para contribuir está disponível na Wiki do projeto.
+
+---
+
+
