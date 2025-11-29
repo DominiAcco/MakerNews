@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { adminRegisterSchema } from "@/lib/adminSchema";
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { registerService } from "@/services/registerService";
 
 export default function RegisterForm() {
     const [form, setForm] = useState({
@@ -53,8 +54,6 @@ export default function RegisterForm() {
         return false;
     };
 
-
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -64,28 +63,17 @@ export default function RegisterForm() {
             return;
         }
 
-        try {
-            const res = await fetch("/api/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
-            });
+        const result = await registerService.registerAdmin(form);
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                toast.error(data.error || "Erro ao registrar administrador");
-            } else {
-                toast.success("Administrador registrado com sucesso!");
-                setForm({ name: "", email: "", password: "" });
-                setErrors({});
-            }
-        } catch (error: any) {
-            console.error("Erro no submit:", error);
-            toast.error("Erro de conexão. Tente novamente.");
-        } finally {
-            setLoading(false);
+        if (result.success) {
+            toast.success("Administrador registrado com sucesso!");
+            setForm({ name: "", email: "", password: "" });
+            setErrors({});
+        } else {
+            toast.error(result.error);
         }
+
+        setLoading(false);
     };
 
     const handleBlur = (field: string) => {
@@ -98,6 +86,7 @@ export default function RegisterForm() {
                     setErrors(prev => ({ ...prev, [field]: "" }));
                 }
             } catch (error: any) {
+               
             }
         }
     };
