@@ -39,9 +39,9 @@ export async function POST(req: Request) {
 
     response.cookies.set("makernews_token", token, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 dias
+      maxAge: 60 * 60 * 24 * 7,
       secure: process.env.NODE_ENV === "production",
     });
 
