@@ -30,7 +30,7 @@ import { DialogHeader } from "@/components/ui/dialog";
 import RegisterPublicationModal from "@/components/RegisterPublicationModal";
 import { CATEGORIES } from "@/consts/categories";
 import { PublicationData } from "@/types/publication";
-import { PublicationService } from "@/service/publicationService";
+import { PublicationService } from "@/services/publicationService";
 import { toast } from "sonner";
 import { getMonthYearFormatted } from "@/utils/date";
 

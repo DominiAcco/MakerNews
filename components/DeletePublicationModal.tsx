@@ -9,7 +9,7 @@ import {
     DialogDescription
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { PublicationService } from "@/service/publicationService";
+import { PublicationService } from "@/services/publicationService";
 import { PublicationData } from "@/types/publication";
 
 interface DeletePublicationModalProps {

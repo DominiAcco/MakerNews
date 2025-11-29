@@ -16,10 +16,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { CATEGORIES } from "@/consts/categories";
 import { toast } from "sonner";
-import { PublicationService } from "@/service/publicationService";
+import { PublicationService } from "@/services/publicationService";
 import { useState } from "react";
 import { Textarea } from "./ui/textarea";
-import { fileUploadService } from "@/service/fileUploadService";
+import { fileUploadService } from "@/services/fileUploadService";
 import { Upload, Trash2 } from "lucide-react";
 import { Spinner } from "./ui/spinner";
 
