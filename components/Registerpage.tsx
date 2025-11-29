@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { adminRegisterSchema } from "@/lib/adminSchema";
+import { adminRegisterSchema } from "@/types/adminSchema";
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { registerService } from "@/services/registerService";
@@ -92,7 +92,7 @@ export default function RegisterForm() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-background to-muted p-4">
             <div className="w-full max-w-md">
                 <div className="bg-card rounded-xl shadow-lg border border-border p-8 backdrop-blur-sm">
                     <div className="text-center mb-8">

@@ -1,7 +1,7 @@
 import { connectDB } from "@/lib/mongoose";
 import Admin from "@/models/admin";
 import { hash } from "bcryptjs";
-import { adminRegisterSchema } from "@/lib/adminSchema"; // ← IMPORTANTE
+import { adminRegisterSchema } from "@/types/adminSchema";
 
 export async function POST(req: Request) {
   try {

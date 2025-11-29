@@ -14,5 +14,6 @@ export const adminRegisterSchema = z.object({
     password: z.string()
         .min(6, { message: "Senha deve ter pelo menos 6 caracteres" })
         .max(100, { message: "Senha muito longa" })
-        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,{message:"Senha deve conter letra maiúscula, minúscula, número e caractere especial",})
+        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,
+            {message:"Senha deve conter letra maiúscula, minúscula, número e caractere especial",})
 });
