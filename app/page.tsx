@@ -1,12 +1,19 @@
+"use client"
+
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
-
-function App() {
+        
+export default function Home() {
+  const router = useRouter();
   return (
-    <>
-      oi
-    </>
+    <div>
+      <Button
+        onClick={() => router.push("admin/dashboard")}
+      >
+        Admin
+      </Button>
+    </div>
   );
 }
-
-export default App;
