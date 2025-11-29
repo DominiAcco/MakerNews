@@ -1,6 +1,6 @@
 #  Maker News – Plataforma Web de Notícias Maker
 
-O **Maker News** é um projeto web desenvolvido pelo primeiro ano do **Sistemas de Informação da UEMS – Unidade de Nova Andradina**.  
+O **Maker News** é um projeto web desenvolvido pela primeira turma de **Sistemas de Informação da UEMS – Unidade de Nova Andradina**.  
   
 Ele funciona como um portal de notícias focado no universo **maker**, trazendo conteúdos sobre tecnologia, inovação, criatividade, eletrônica e projetos práticos.
   
