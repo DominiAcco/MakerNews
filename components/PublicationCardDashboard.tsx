@@ -9,14 +9,13 @@ import EditPublicationModal from "@/components/EditPublicationModal";
 import DeletePublicationModal from "@/components/DeletePublicationModal"; 
 
 interface PublicationCardDashboardProps {
-    publication: PublicationData;
+    publication: PublicationData
     onUpdate?: () => void;
 }
-
 export default function PublicationCardDashboard({ publication, onUpdate }: PublicationCardDashboardProps) {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false); 
-
+  
     function handleEditSuccess() {
         setIsEditOpen(false);
         onUpdate?.();
@@ -31,8 +30,8 @@ export default function PublicationCardDashboard({ publication, onUpdate }: Publ
         <>
             <div className="border border-[#AEAEAE] rounded-xl bg-white overflow-hidden w-full hover:shadow-lg transition-shadow duration-300">
                 <div className="relative h-48 sm:h-40 w-full">
-                    <Image
-                        src="/ImagemCardTeste.png"
+                     <Image
+                        src={publication.image_url || "/notFound.png"} 
                         alt={publication.title}
                         fill
                         className="object-cover"

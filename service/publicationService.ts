@@ -13,13 +13,14 @@ export const PublicationService = {
         return response.data;
     },
 
-    create: async (data: PublicationFormData): Promise<PublicationData> => { // Mudar quando for usar imagem, usar append
+    create: async (data: PublicationFormData): Promise<PublicationData> => {
         const response = await api.post(RESOURCE, {
             title: data.title,
             description: data.description,
             status: data.status,
             category: data.category,
             createdBy: data.createdBy,
+            image_url: data.image_url,
         });
         return response.data;
     },
