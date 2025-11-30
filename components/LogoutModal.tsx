@@ -11,8 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogClose
+  DialogClose,
+  DialogDescription
 } from "@/components/ui/dialog";
+import { Button } from "./ui/button";
 
 export function LogoutModal() {
   const router = useRouter();
@@ -24,31 +26,36 @@ export function LogoutModal() {
 
   return (
     <Dialog>
-      <DialogTrigger className="flex items-center  gap-2  px-2 py-2 rounded-md text-#020202-500 hover:text-red-600">
+      <DialogTrigger className="flex items-center gap-2 px-2 py-2 rounded-md text-#020202-500 hover:text-red-600">
         <LogOut size={18} />
-        <span>Sair</span>   
+        <span>Sair</span>
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tem certeza que deseja sair?</DialogTitle>
+          <DialogDescription>
+            Você será desconectado da sua conta.
+          </DialogDescription>
         </DialogHeader>
 
         <DialogFooter className="flex gap-3 mt-4">
           <DialogClose asChild>
-            <button className="border border-gray-400 px-4 py-2 rounded-md hover:bg-gray-100">
+            <Button variant="light" className="min-w-25">
               Cancelar
-            </button>
+            </Button>
           </DialogClose>
 
-          <button
+          <Button
+            variant="destructive"
+            className="min-w-25"
             onClick={handleLogout}
-            className="border border-red-500 text-red-600 px-4 py-2 rounded-md hover:bg-red-50"
           >
             Sair
-          </button>
+          </Button>
         </DialogFooter>
       </DialogContent>
+
     </Dialog>
   );
 }
