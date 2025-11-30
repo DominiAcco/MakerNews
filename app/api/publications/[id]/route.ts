@@ -5,6 +5,7 @@ import Publication from "@/models/publication";
 import { requireAdmin } from "@/lib/auth";
 
 export async function GET(
+  req: Request,
   ctx: { params: Promise<{ id: string }> }
 ) {
   try {
