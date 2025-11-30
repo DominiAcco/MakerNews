@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -8,9 +7,11 @@ import {
     DialogTitle,
     DialogDescription
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { PublicationService } from "@/services/publicationService";
 import { PublicationData } from "@/types/publication";
+import { fileUploadService } from "@/services/fileUploadService";
 
 interface DeletePublicationModalProps {
     publication: PublicationData;
@@ -28,6 +29,10 @@ export default function DeletePublicationModal({
 
     const handleDelete = async () => {
         try {
+
+            if (publication.image_url) {
+                await fileUploadService.deleteImage(publication.image_url);
+            }
             await PublicationService.delete(publication._id);
             toast.success("Publicação excluída com sucesso!");
             onSuccess?.();
