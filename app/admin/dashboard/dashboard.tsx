@@ -36,6 +36,7 @@ import { getMonthYearFormatted } from "@/utils/date";
 
 import { useRouter } from "next/router";
 import { getAuthUser } from "@/services/authService";
+import { LogoutModal } from "@/components/LogoutModal";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -154,7 +155,10 @@ export default function Dashboard() {
                             Gerencie e acompanhe todas as suas publicações
                         </p>
                     </div>
-                    
+                    <div className="flex justify-end p-4">
+                        <LogoutModal />
+                    </div>
+
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center">
                         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                             <DialogTrigger asChild>
