@@ -1,3 +1,4 @@
+import { requireAdmin } from "@/lib/auth";
 import { v2 as cloudinary } from "cloudinary";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,6 +11,16 @@ cloudinary.config({
 
 export async function POST(req: NextRequest) {
     try {
+
+        const admin = await requireAdmin();
+
+        if (!admin) {
+            return NextResponse.json(
+                { error: "Não autorizado" },
+                { status: 401 }
+            );
+        }
+        
         const formData = await req.formData();
         const file = formData.get("file") as File | null;
         const folderName = formData.get("folderName") as string
@@ -43,7 +54,7 @@ export async function POST(req: NextRequest) {
         }
     }
     catch (error) {
-       return NextResponse.json({
+        return NextResponse.json({
             msg: "Error in fileupload route",
             statusCode: 500,
         })
