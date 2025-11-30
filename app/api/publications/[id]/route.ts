@@ -2,12 +2,23 @@ import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { connectDB } from "@/lib/mongoose";
 import Publication from "@/models/publication";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET(
   req: Request,
   ctx: { params: Promise<{ id: string }> }
 ) {
   try {
+
+    const admin = await requireAdmin();
+
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Não autorizado" },
+        { status: 401 }
+      );
+    }
+    
     const { id } = await ctx.params;
     await connectDB();
 
@@ -43,6 +54,16 @@ export async function PUT(
   ctx: { params: Promise<{ id: string }> }
 ) {
   try {
+
+    const admin = await requireAdmin();
+
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Não autorizado" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await ctx.params;
     const body = await req.json();
     await connectDB();
@@ -103,6 +124,16 @@ export async function DELETE(
   ctx: { params: Promise<{ id: string }> }
 ) {
   try {
+
+    const admin = await requireAdmin();
+
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Não autorizado" },
+        { status: 401 }
+      );
+    }
+
     const { id } = await ctx.params;
     await connectDB();
 
