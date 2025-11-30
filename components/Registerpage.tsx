@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { adminRegisterSchema } from "@/types/adminSchema";
+import { AdminRegisterSchema } from "@/types/adminSchema";
 import { Eye, EyeOff, User, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
-import { registerService } from "@/services/registerService";
+import { AdminService } from "@/services/adminService";
 
 export default function RegisterForm() {
     const [form, setForm] = useState({
@@ -29,7 +29,7 @@ export default function RegisterForm() {
     };
 
     const validateForm = () => {
-        const result = adminRegisterSchema.safeParse(form);
+        const result = AdminRegisterSchema.safeParse(form);
 
         if (result.success) {
             setErrors({});
@@ -63,30 +63,34 @@ export default function RegisterForm() {
             return;
         }
 
-        const result = await registerService.registerAdmin(form);
+        try {
+            await AdminService.create(form);
 
-        if (result.success) {
             toast.success("Administrador registrado com sucesso!");
             setForm({ name: "", email: "", password: "" });
             setErrors({});
-        } else {
-            toast.error(result.error);
-        }
 
-        setLoading(false);
+        } catch (err: any) {
+            console.error(err);
+            toast.error(err?.response?.data?.error || "Erro ao registrar administrador");
+
+        } finally {
+            setLoading(false);
+        }
     };
+
 
     const handleBlur = (field: string) => {
         if (form[field as keyof typeof form]) {
             try {
-                const fieldSchema = adminRegisterSchema.pick({ [field]: true });
+                const fieldSchema = AdminRegisterSchema.pick({ [field]: true });
                 fieldSchema.parse({ [field]: form[field as keyof typeof form] });
 
                 if (errors[field]) {
                     setErrors(prev => ({ ...prev, [field]: "" }));
                 }
             } catch (error: any) {
-               
+
             }
         }
     };

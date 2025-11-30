@@ -1,15 +1,27 @@
 import { connectDB } from "@/lib/mongoose";
 import Admin from "@/models/admin";
 import { hash } from "bcryptjs";
-import { adminRegisterSchema } from "@/types/adminSchema";
+import { AdminRegisterSchema } from "@/types/adminSchema";
+import { requireAdmin } from "@/lib/auth";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+
+    const admin = await requireAdmin();
+
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Não autorizado" },
+        { status: 401 }
+      );
+    }
+    
     await connectDB();
 
     const body = await req.json();
 
-    const parsed = adminRegisterSchema.safeParse(body);
+    const parsed = AdminRegisterSchema.safeParse(body);
 
     if (!parsed.success) {
       return Response.json(
