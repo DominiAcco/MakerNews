@@ -17,6 +17,7 @@ export const PublicationService = {
         const response = await api.post(RESOURCE, {
             title: data.title,
             description: data.description,
+            content: data.content,
             status: data.status,
             category: data.category,
             createdBy: data.createdBy,
@@ -29,9 +30,11 @@ export const PublicationService = {
         const response = await api.put<PublicationData>(`${RESOURCE}/${id}`, {
             title: data.title,
             description: data.description,
+            content: data.content,
             status: data.status,
             category: data.category,
             createdBy: data.createdBy,
+            image_url: data.image_url
         });
         return response.data;
     },

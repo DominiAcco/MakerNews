@@ -22,6 +22,7 @@ import { Textarea } from "./ui/textarea";
 import { fileUploadService } from "@/services/fileUploadService";
 import { Upload, Trash2 } from "lucide-react";
 import { Spinner } from "./ui/spinner";
+import { validateImage } from "@/utils/imageUtils";
 
 interface RegisterPublicationFormProps {
   onClose: () => void;
@@ -35,13 +36,13 @@ export default function RegisterPublicationModal({
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSaving, setIsSaving] = useState(false);
-  const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
   const methods = useForm<PublicationFormData>({
     resolver: zodResolver(PublicationSchema),
     defaultValues: {
       title: "",
       description: "",
+      content: "",
       status: "published",
       category: undefined,
       createdBy: {
@@ -53,34 +54,16 @@ export default function RegisterPublicationModal({
     },
   });
 
-  async function isAnimatedWebp(file: File): Promise<boolean> {
-    const buffer = await file.arrayBuffer();
-    const bytes = new Uint8Array(buffer);
-    const header = new TextDecoder().decode(bytes);
-    return header.includes("ANIM");
-  }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > MAX_FILE_SIZE) {
-      toast.error("A imagem deve ter no máximo 10MB.");
-      return;
-    }
+    const error = await validateImage(file);
 
-    if (!file.type.startsWith("image/")) {
-      toast.error("Envie apenas arquivos de imagem.");
-      return;
-    }
-
-    if (file.type === "image/gif") {
-      toast.error("GIF animado não é permitido.");
-      return;
-    }
-
-    if (file.type === "image/webp" && await isAnimatedWebp(file)) {
-      toast.error("Imagens WebP animadas não são permitidas.");
+    if (error) {
+      toast.error(error);
+      e.target.value = "";
       return;
     }
 
@@ -141,7 +124,7 @@ export default function RegisterPublicationModal({
               <FormLabel>Descrição</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Descrição"
+                  placeholder="Breve descrição abaixo do título"
                   className="break-all max-h-52"
                   {...field}
                 />
@@ -150,6 +133,25 @@ export default function RegisterPublicationModal({
             </FormItem>
           )}
         />
+
+        <FormField
+          control={methods.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Conteúdo</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Conteúdo completo da publicação"
+                  className="break-all max-h-52"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={methods.control}
           name="image_url"
@@ -196,7 +198,7 @@ export default function RegisterPublicationModal({
                       onClick={() => setSelectedFile(null)}
                       className="text-red-500 hover:text-red-700"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-4 h-4 hover:cursor-pointer" />
                     </button>
                   </div>
                 )}
@@ -216,7 +218,7 @@ export default function RegisterPublicationModal({
                 <FormLabel>Status</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="border sm:min-w-40">
+                    <SelectTrigger className="sm:min-w-40">
                       <SelectValue placeholder="Status" />
                     </SelectTrigger>
                   </FormControl>
@@ -238,7 +240,7 @@ export default function RegisterPublicationModal({
                 <FormLabel>Categoria</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="border sm:min-w-40">
+                    <SelectTrigger className="sm:min-w-40">
                       <SelectValue placeholder="Selecione" />
                     </SelectTrigger>
                   </FormControl>
