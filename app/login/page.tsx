@@ -4,12 +4,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+    const router = useRouter();
+
     const [form, setForm] = useState({
         email: "",
         password: "",
     });
+
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
@@ -19,7 +24,35 @@ export default function LoginForm() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
-        // TO DO
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            const res = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                toast.error(data.error || "Erro ao fazer login");
+                setLoading(false);
+                return;
+            }
+
+            toast.success("Login realizado com sucesso!");
+
+            setTimeout(() => {
+                router.push("/admin/dashboard");
+            }, 1000);
+
+        } catch (err) {
+            toast.error("Erro inesperado. Tente novamente.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
