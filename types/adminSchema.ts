@@ -1,6 +1,15 @@
 import { z } from 'zod';
 
-export const adminRegisterSchema = z.object({
+export type AdminData = {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export const AdminRegisterSchema = z.object({
     name: z.string()
         .min(2, { message: "Nome deve ter pelo menos 2 caracteres" })
         .max(100, { message: "Nome muito longo" })
@@ -17,3 +26,10 @@ export const adminRegisterSchema = z.object({
         .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,
             {message:"Senha deve conter letra maiúscula, minúscula, número e caractere especial",})
 });
+
+export const AdminEditSchema = AdminRegisterSchema.pick({
+  name: true,
+  email: true
+});
+
+export type AdminFormData = z.infer<typeof AdminRegisterSchema>;

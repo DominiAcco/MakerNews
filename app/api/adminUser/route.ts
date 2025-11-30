@@ -1,9 +1,36 @@
 import { connectDB } from "@/lib/mongoose";
 import Admin from "@/models/admin";
 import { hash } from "bcryptjs";
-import { adminRegisterSchema } from "@/types/adminSchema";
+import { AdminRegisterSchema } from "@/types/adminSchema";
 import { requireAdmin } from "@/lib/auth";
 import { NextResponse } from "next/server";
+
+
+export async function GET() {
+  try {
+    const admin = await requireAdmin();
+
+    if (!admin) {
+      return NextResponse.json(
+        { error: "Não autorizado" },
+        { status: 401 }
+      );
+    }
+
+    await connectDB();
+
+    const admins = await Admin.find().select("-password");
+
+    return NextResponse.json(admins, { status: 200 });
+
+  } catch (error) {
+    console.error("ERRO GET ADMINS:", error);
+    return NextResponse.json(
+      { error: "Erro interno no servidor" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -16,12 +43,12 @@ export async function POST(req: Request) {
         { status: 401 }
       );
     }
-    
+
     await connectDB();
 
     const body = await req.json();
 
-    const parsed = adminRegisterSchema.safeParse(body);
+    const parsed = AdminRegisterSchema.safeParse(body);
 
     if (!parsed.success) {
       return Response.json(
