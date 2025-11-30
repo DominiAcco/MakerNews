@@ -54,11 +54,11 @@ export async function PUT(
       );
     }
 
-    const allowedFields = ["title", "description", "category", "status"];
+    const allowedFields = ["title", "description", "content", "category", "status", "image_url"];
 
     const filteredData: Record<string, unknown> = {};
     for (const key of allowedFields) {
-      if (key in body) {
+      if (key in body) {  
         filteredData[key] = body[key];
       }
     }

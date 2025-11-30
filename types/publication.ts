@@ -5,6 +5,7 @@ export type PublicationData = {
     _id: string;
     title: string;
     description: string;
+    content: string;
     category: string;
     status: "published" | "archived";
     createdBy: {
@@ -21,6 +22,7 @@ export const PublicationSchema = z.object({
     title: z.string().min(1, "Informe o título"),
     description: z.string().min(1, "Informe a descrição"),
     category: z.enum(CATEGORIES, "Selecione uma categoria"),
+    content: z.string().min(1, "Informe o conteúdo"),
     status: z.enum(["published", "archived"]),
     createdBy: z.object({
         userId: z.string(),

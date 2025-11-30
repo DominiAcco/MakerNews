@@ -24,6 +24,11 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { useState } from "react";
+import { validateImage } from "@/utils/imageUtils";
+import { Upload, Trash2 } from "lucide-react";
+import { fileUploadService } from "@/services/fileUploadService";
+import { Spinner } from "./ui/spinner";
 
 interface EditPublicationModalProps {
     publication: PublicationData;
@@ -39,6 +44,10 @@ export default function EditPublicationModal({
     onSuccess
 }: EditPublicationModalProps) {
 
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string>(publication.image_url || "");
+    const [isSaving, setIsSaving] = useState(false);
+
     const defaultCategory = CATEGORIES.includes(publication.category as any)
         ? (publication.category as typeof CATEGORIES[number])
         : undefined;
@@ -48,6 +57,7 @@ export default function EditPublicationModal({
         defaultValues: {
             title: publication.title,
             description: publication.description,
+            content: publication.content,
             status: publication.status,
             category: defaultCategory,
             createdBy: publication.createdBy,
@@ -55,15 +65,49 @@ export default function EditPublicationModal({
         },
     });
 
+    async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const error = await validateImage(file);
+        if (error) {
+            toast.error(error);
+            e.target.value = "";
+            return;
+        }
+
+        setSelectedFile(file);
+        setPreviewUrl(URL.createObjectURL(file));
+    }
+
+
     const onSubmit = async (values: PublicationFormData) => {
         try {
-            await PublicationService.update(publication._id, values);
+            setIsSaving(true);
+
+            let imageUrl = values.image_url;
+
+            if (selectedFile) {
+                const uploadedUrl = await fileUploadService.uploadImage(selectedFile);
+                methods.setValue("image_url", uploadedUrl);
+                imageUrl = uploadedUrl;
+            }
+
+            const updatedData: PublicationFormData = {
+                ...values,
+                image_url: imageUrl,
+            };
+
+            await PublicationService.update(publication._id, updatedData);
+
             toast.success("Publicação atualizada com sucesso!");
             onSuccess?.();
             onClose();
         } catch (err: any) {
             console.error(err);
             toast.error("Erro ao atualizar publicação");
+        } finally {
+            setIsSaving(false);
         }
     };
 
@@ -108,6 +152,85 @@ export default function EditPublicationModal({
                             )}
                         />
 
+                        <FormField
+                            control={methods.control}
+                            name="content"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Conteúdo</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Conteúdo completo da publicação"
+                                            className="break-all max-h-52"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={methods.control}
+                            name="image_url"
+                            render={() => (
+                                <FormItem>
+                                    <FormLabel>Imagem</FormLabel>
+
+                                    <div className="space-y-3">
+                                        <Input
+                                            type="file"
+                                            id="file-input"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            className="hidden"
+                                        />
+
+                                        <label
+                                            htmlFor="file-input"
+                                            className="block w-full p-4 border-2 border-dashed border-gray-300 rounded-lg text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-colors"
+                                        >
+                                            <Upload className="w-8 h-8 mx-auto text-gray-400 mb-2" />
+                                            <span className="text-sm text-gray-600">
+                                                {selectedFile ? "Alterar imagem" : previewUrl ? "Alterar imagem" : "Clique para adicionar uma imagem"}
+                                            </span>
+                                        </label>
+
+                                        {(previewUrl || selectedFile) && (
+                                            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                                <img
+                                                    src={selectedFile ? URL.createObjectURL(selectedFile) : previewUrl}
+                                                    alt="Preview"
+                                                    className="w-16 h-16 rounded object-cover"
+                                                />
+                                                <div className="flex-1">
+                                                    {selectedFile && (
+                                                        <>
+                                                            <p className="text-sm font-medium text-gray-900">{selectedFile.name}</p>
+                                                            <p className="text-xs text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                                                        </>
+                                                    )}
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setSelectedFile(null);
+                                                        setPreviewUrl("");
+                                                        methods.setValue("image_url", "");
+                                                    }}
+                                                    className="text-red-500 hover:text-red-700"
+                                                >
+                                                    <Trash2 className="w-4 h-4 hover:cursor-pointer" />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                         <div className="flex justify-between gap-4">
                             <FormField
                                 control={methods.control}
@@ -117,7 +240,7 @@ export default function EditPublicationModal({
                                         <FormLabel>Status</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger className="sm:min-w-40">
                                                     <SelectValue placeholder="Status" />
                                                 </SelectTrigger>
                                             </FormControl>
@@ -139,7 +262,7 @@ export default function EditPublicationModal({
                                         <FormLabel>Categoria</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
-                                                <SelectTrigger>
+                                                <SelectTrigger className="sm:min-w-40">
                                                     <SelectValue placeholder="Selecione uma categoria" />
                                                 </SelectTrigger>
                                             </FormControl>
@@ -162,16 +285,20 @@ export default function EditPublicationModal({
                                 type="button"
                                 variant="light"
                                 className="min-w-30"
-                                onClick={onClose}
+                                onClick={() => onClose?.()}
+                                disabled={isSaving}
                             >
                                 Cancelar
                             </Button>
+
                             <Button
                                 type="submit"
                                 variant="purple"
-                                className="min-w-30"
+                                className="min-w-30 flex items-center gap-2"
+                                disabled={isSaving}
                             >
-                                Salvar
+                                {isSaving && <Spinner className="w-4 h-4" />}
+                                {isSaving ? "Salvando..." : "Salvar"}
                             </Button>
                         </div>
                     </form>
