@@ -27,4 +27,9 @@ export const AdminRegisterSchema = z.object({
             {message:"Senha deve conter letra maiúscula, minúscula, número e caractere especial",})
 });
 
+export const AdminEditSchema = AdminRegisterSchema.pick({
+  name: true,
+  email: true
+});
+
 export type AdminFormData = z.infer<typeof AdminRegisterSchema>;

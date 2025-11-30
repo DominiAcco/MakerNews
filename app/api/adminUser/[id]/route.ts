@@ -5,7 +5,10 @@ import { AdminRegisterSchema } from "@/types/adminSchema";
 import { requireAdmin } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(
+    req: Request,
+    ctx: { params: Promise<{ id: string }> }
+) {
     try {
         const admin = await requireAdmin();
 
@@ -15,6 +18,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
                 { status: 401 }
             );
         }
+
+        const { id } = await ctx.params;
 
         await connectDB();
 
@@ -39,7 +44,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         }
 
         const updatedAdmin = await Admin.findByIdAndUpdate(
-            params.id,
+            id,
             updateData,
             { new: true }
         ).select("-password");
@@ -65,26 +70,24 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-    try {
-        const admin = await requireAdmin();
 
+export async function DELETE(
+    req: Request,
+    ctx: { params: Promise<{ id: string }> }) {
+    try {
+        const { id } = await ctx.params;
+
+        const admin = await requireAdmin();
         if (!admin) {
-            return NextResponse.json(
-                { error: "Não autorizado" },
-                { status: 401 }
-            );
+            return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
         }
 
         await connectDB();
 
-        const deleted = await Admin.findByIdAndDelete(params.id);
+        const deleted = await Admin.findByIdAndDelete(id);
 
         if (!deleted) {
-            return NextResponse.json(
-                { error: "Administrador não encontrado" },
-                { status: 404 }
-            );
+            return NextResponse.json({ error: "Administrador não encontrado" }, { status: 404 });
         }
 
         return NextResponse.json(
@@ -94,10 +97,8 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
 
     } catch (error) {
         console.error("ERRO DELETE ADMIN:", error);
-        return NextResponse.json(
-            { error: "Erro interno no servidor" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });
     }
 }
+
 

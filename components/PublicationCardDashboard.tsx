@@ -6,7 +6,7 @@ import Image from "next/image";
 import { capitalize } from "@/utils/capitalize";
 import { useState } from "react";
 import EditPublicationModal from "@/components/EditPublicationModal";
-import DeletePublicationModal from "@/components/DeletePublicationModal"; 
+import DeletePublicationModal from "@/components/DeletePublicationModal";
 
 interface PublicationCardDashboardProps {
     publication: PublicationData
@@ -14,8 +14,8 @@ interface PublicationCardDashboardProps {
 }
 export default function PublicationCardDashboard({ publication, onUpdate }: PublicationCardDashboardProps) {
     const [isEditOpen, setIsEditOpen] = useState(false);
-    const [isDeleteOpen, setIsDeleteOpen] = useState(false); 
-  
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
     function handleEditSuccess() {
         setIsEditOpen(false);
         onUpdate?.();
@@ -23,19 +23,20 @@ export default function PublicationCardDashboard({ publication, onUpdate }: Publ
 
     function handleDeleteSuccess() {
         setIsDeleteOpen(false);
-        onUpdate?.(); 
+        onUpdate?.();
     }
 
     return (
         <>
             <div className="border border-[#AEAEAE] rounded-xl bg-white overflow-hidden w-full hover:shadow-lg transition-shadow duration-300">
                 <div className="relative h-48 sm:h-40 w-full">
-                     <Image
-                        src={publication.image_url || "/notFound.png"} 
+                    <Image
+                        src={publication.image_url || "/notFound.png"}
                         alt={publication.title}
                         fill
                         className="object-cover"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        loading="eager"
                     />
                     <span className={`absolute top-5 left-8 sm:left-6 md:left-8 px-5 py-1 text-xs font-bold rounded-full text-white tracking-wide
                         ${publication.status === "published" ? "bg-green-700" : "bg-gray-700"}`}>
