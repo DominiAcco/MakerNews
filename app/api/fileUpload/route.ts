@@ -9,6 +9,18 @@ cloudinary.config({
 });
 
 
+function extractPublicId(url: string): string | null {
+    if (!url) return null;
+
+    const parts = url.split("/");
+    const file = parts.pop();
+    const folder = parts.pop();
+
+    if (!file || !folder) return null;
+
+    return `${folder}/${file.split(".")[0]}`;
+}
+
 export async function POST(req: NextRequest) {
     try {
 
@@ -20,7 +32,7 @@ export async function POST(req: NextRequest) {
                 { status: 401 }
             );
         }
-        
+
         const formData = await req.formData();
         const file = formData.get("file") as File | null;
         const folderName = formData.get("folderName") as string
@@ -58,5 +70,38 @@ export async function POST(req: NextRequest) {
             msg: "Error in fileupload route",
             statusCode: 500,
         })
+    }
+}
+
+export async function DELETE(req: NextRequest) {
+    try {
+        const admin = await requireAdmin();
+
+        if (!admin) {
+            return NextResponse.json(
+                { error: "Não autorizado" },
+                { status: 401 }
+            );
+        }
+
+        const { imageUrl } = await req.json();
+
+        if (!imageUrl)
+            return NextResponse.json({ error: "URL não enviada" }, { status: 400 });
+
+        const publicId = extractPublicId(imageUrl);
+
+        if (!publicId)
+            return NextResponse.json({ error: "public_id inválido" }, { status: 400 });
+
+        await cloudinary.uploader.destroy(publicId);
+
+        return NextResponse.json({ success: true });
+
+    } catch (err) {
+        return NextResponse.json(
+            { error: "Erro ao deletar imagem" },
+            { status: 500 }
+        );
     }
 }

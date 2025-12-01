@@ -8,22 +8,32 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { PublicationSchema, PublicationFormData, PublicationData } from "@/types/publication";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { toast } from "sonner";
-import { PublicationService } from "@/services/publicationService";
-import { CATEGORIES } from "@/consts/categories";
+import {
+    PublicationSchema,
+    PublicationFormData,
+    PublicationData
+} from "@/types/publication";
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem
+} from "./ui/select";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
+import { toast } from "sonner";
+import { PublicationService } from "@/services/publicationService";
+import { CATEGORIES } from "@/consts/categories";
 import { useState } from "react";
 import { validateImage } from "@/utils/imageUtils";
 import { Upload, Trash2 } from "lucide-react";
@@ -47,6 +57,7 @@ export default function EditPublicationModal({
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string>(publication.image_url || "");
     const [isSaving, setIsSaving] = useState(false);
+    const [removeOldImage, setRemoveOldImage] = useState(false);
 
     const defaultCategory = CATEGORIES.includes(publication.category as any)
         ? (publication.category as typeof CATEGORIES[number])
@@ -80,14 +91,23 @@ export default function EditPublicationModal({
         setPreviewUrl(URL.createObjectURL(file));
     }
 
-
     const onSubmit = async (values: PublicationFormData) => {
         try {
             setIsSaving(true);
 
             let imageUrl = values.image_url;
 
+            if (removeOldImage && publication.image_url) {
+                await fileUploadService.deleteImage(publication.image_url);
+                imageUrl = "";
+            }
+
             if (selectedFile) {
+
+                if (publication.image_url && !removeOldImage) {
+                    await fileUploadService.deleteImage(publication.image_url);
+                }
+
                 const uploadedUrl = await fileUploadService.uploadImage(selectedFile);
                 methods.setValue("image_url", uploadedUrl);
                 imageUrl = uploadedUrl;
@@ -214,6 +234,7 @@ export default function EditPublicationModal({
                                                 <button
                                                     type="button"
                                                     onClick={() => {
+                                                        setRemoveOldImage(true);
                                                         setSelectedFile(null);
                                                         setPreviewUrl("");
                                                         methods.setValue("image_url", "");

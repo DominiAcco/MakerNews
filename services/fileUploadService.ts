@@ -17,4 +17,11 @@ export const fileUploadService = {
 
     return data.res.secure_url;
   },
+
+  deleteImage: async (imageUrl: string) => {
+    await axios.delete("/api/fileUpload", {
+      data: { imageUrl }
+    });
+  }
+
 };
