@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import HomeBanner1 from "@/components/HomeBanner1";
 import HomeBanner2 from "@/components/HomeBanner2";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { PublicationList } from "@/components/PublicationsList";
 import Image from "next/image";
 
 type Banner = {
@@ -131,13 +132,13 @@ export default function Home() {
         </button>
       </section>
 
-      <section className="mt-8 md:mt-15 flex justify-center items-center">
+      <section className="mt-15 md:mt-30 flex justify-center items-center">
         <div className="w-[90%] md:w-[80%]">
-          <p className="text-lg md:text-xl lg:text-2xl">PUBLICAÇÕES</p>
+          <PublicationList />
         </div>
       </section>
 
-      <section className="mt-8 md:mt-15 flex justify-center items-center">
+      <section className="mt-15 md:mt-30 flex justify-center items-center">
         <div className="w-[90%] md:w-[80%] flex flex-col lg:flex-row justify-between gap-8">
 
           <div>

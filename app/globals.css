@@ -138,4 +138,78 @@
     @apply bg-background text-foreground;
     font-family: var(--font-lato), sans-serif;
   }
+  /* Animação de flutuação suave */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Estilizando scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #8b5cf6, #7c3aed);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #7c3aed, #6d28d9);
+}
+
+/* Efeitos de gradiente animado */
+.gradient-border {
+  position: relative;
+  border: double 2px transparent;
+  background-image: linear-gradient(white, white), 
+                    linear-gradient(45deg, #8b5cf6, #7c3aed, #6d28d9);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Efeito de pulso para botões */
+@keyframes pulse-purple {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+  }
+}
+
+.pulse-purple {
+  animation: pulse-purple 2s infinite;
+}
+
+/* Efeito de brilho */
+.glow-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-effect::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.glow-effect:hover::before {
+  opacity: 1;
+}
 }
