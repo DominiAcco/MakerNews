@@ -99,7 +99,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Indicadores responsivos */}
         <div className="absolute bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2 md:gap-3 z-10">
           {banners.map((_, idx) => (
             <button
@@ -114,7 +113,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Botões de navegação responsivos */}
         <button
           onClick={prevBanner}
           disabled={isTransitioning}
