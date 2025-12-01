@@ -131,10 +131,14 @@ export default function Home() {
           <ChevronRight className="w-4 h-4 md:w-6 md:h-6 lg:w-7 lg:h-7" />
         </button>
       </section>
-      
-      <PublicationList />
 
-      <section className="mt-8 md:mt-15 flex justify-center items-center">
+      <section className="mt-15 md:mt-30 flex justify-center items-center">
+        <div className="w-[90%] md:w-[80%]">
+          <PublicationList />
+        </div>
+      </section>
+
+      <section className="mt-15 md:mt-30 flex justify-center items-center">
         <div className="w-[90%] md:w-[80%] flex flex-col lg:flex-row justify-between gap-8">
 
           <div>
