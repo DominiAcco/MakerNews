@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import HomeBanner1 from "@/components/HomeBanner1";
 import HomeBanner2 from "@/components/HomeBanner2";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 type Banner = {
   image: string;
@@ -62,7 +63,7 @@ export default function Home() {
 
     intervalRef.current = setInterval(() => {
       nextBanner();
-    }, 8000); 
+    }, 8000);
 
     return () => {
       if (intervalRef.current) {
@@ -81,20 +82,18 @@ export default function Home() {
         />
 
         <div
-          className={`absolute inset-0 bg-black transition-opacity duration-700 ${
-            isTransitioning ? "opacity-30" : "opacity-0"
-          }`}
+          className={`absolute inset-0 bg-black transition-opacity duration-700 ${isTransitioning ? "opacity-30" : "opacity-0"
+            }`}
         />
 
         <div className="relative w-[90%] md:w-[80%] flex flex-col mt-6 md:mt-10 z-10">
           <Navbar theme={banners[currentBanner].navbarTheme} />
 
           <div
-            className={`transition-all duration-700 ease-in-out ${
-              isTransitioning
-                ? "opacity-0 transform translate-y-4"
-                : "opacity-100 transform translate-y-0"
-            }`}
+            className={`transition-all duration-700 ease-in-out ${isTransitioning
+              ? "opacity-0 transform translate-y-4"
+              : "opacity-100 transform translate-y-0"
+              }`}
           >
             {banners[currentBanner].component}
           </div>
@@ -105,11 +104,10 @@ export default function Home() {
           {banners.map((_, idx) => (
             <button
               key={idx}
-              className={`rounded-full transition-all duration-500 ease-out cursor-pointer ${
-                idx === currentBanner 
-                  ? "bg-white w-6 h-2 md:w-8 md:h-3" 
-                  : "bg-white/50 w-2 h-2 md:w-3 md:h-3 hover:bg-white/70"
-              }`}
+              className={`rounded-full transition-all duration-500 ease-out cursor-pointer ${idx === currentBanner
+                ? "bg-white w-6 h-2 md:w-8 md:h-3"
+                : "bg-white/50 w-2 h-2 md:w-3 md:h-3 hover:bg-white/70"
+                }`}
               onClick={() => handleBannerChange(idx)}
               aria-label={`Ir para banner ${idx + 1}`}
             />
@@ -134,12 +132,45 @@ export default function Home() {
           <ChevronRight className="w-4 h-4 md:w-6 md:h-6 lg:w-7 lg:h-7" />
         </button>
       </section>
-      
+
       <section className="mt-8 md:mt-15 flex justify-center items-center">
         <div className="w-[90%] md:w-[80%]">
-          <h3 className="text-lg md:text-xl lg:text-2xl">PUBLICAÇÕES</h3>
+          <p className="text-lg md:text-xl lg:text-2xl">PUBLICAÇÕES</p>
         </div>
       </section>
+
+      <section className="mt-8 md:mt-15 flex justify-center items-center">
+        <div className="w-[90%] md:w-[80%] flex flex-col lg:flex-row justify-between gap-8">
+
+          <div>
+            <Image
+              src="/imageSectionWhatIsMaker.jpg"
+              alt="Imagem explicativa"
+              width={500}
+              height={360}
+              className="rounded-lg w-full h-auto lg:max-w-lg"
+            />
+
+          </div>
+          <div className="w-full lg:w-1/2 flex flex-col justify-center gap-4 md:gap-6">
+            <div className="flex flex-col gap-3 md:gap-4">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-[#5421CD]">
+                O QUE É O MAKER?
+              </p>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black leading-tight">
+                Quem somos e <br className="hidden sm:block" />o que fazemos
+              </h2>
+            </div>
+
+            <p className="text-base sm:text-lg md:text-xl lg:text-xl text-[#333333] leading-relaxed max-w-2xl">
+              O Laboratório Maker é um ambiente colaborativo que incentiva a criação, experimentação e desenvolvimento de ideias.
+              Aqui, estudantes e comunidade podem explorar tecnologias, aprender fazendo e transformar projetos em soluções reais.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
     </main>
   );
 }
