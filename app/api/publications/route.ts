@@ -7,15 +7,6 @@ import { requireAdmin } from "@/lib/auth";
 
 export async function GET() {
   try {
-    const admin = await requireAdmin();
-
-    if (!admin) {
-      return NextResponse.json(
-        { error: "Não autorizado" },
-        { status: 401 }
-      );
-    }
-
     await connectDB();
     const docs = await Publication.find().sort({ createdAt: -1 }).lean();
     return NextResponse.json(docs);
