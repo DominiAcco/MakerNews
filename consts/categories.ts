@@ -1,14 +1,15 @@
 export const CATEGORIES = [
-  "tecnologia",
-  "negócios",
-  "marketing",
-  "educação",
-  "design",
-  "saúde",
-  "finanças",
-  "esportes",
-  "games",
-  "entretenimento",
+  "Arduino",
+  "Educação",
+  "Empreendedorismo",
+  "Inteligência Artificial",
+  "Impressão 3D",
+  "Programação",
+  "Robótica",
+  "Tecnologia",
+  "Entretenimento",
+  "Outras",
 ] as const;
+
 
 export type Category = (typeof CATEGORIES)[number];

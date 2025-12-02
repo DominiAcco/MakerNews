@@ -38,9 +38,21 @@ export const PublicationService = {
         });
         return response.data;
     },
+
     delete: async (id: string) => {
-        const { data } = await api.delete(`/publications/${id}`);
+        const { data } = await api.delete(`${RESOURCE}/${id}`);
         return data;
     },
+
+    getById: async (id: string): Promise<PublicationData | null> => {
+        try {
+            const res = await api.get(`${RESOURCE}/${id}`);
+            return res.data;
+        } catch (error: any) {
+            return null;
+        }
+    }
+
+
 
 };  

@@ -6,50 +6,85 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { AdminLoginFormData, AdminLoginSchema } from "@/types/adminSchema";
+import { LoginService } from "@/services/loginService";
 
 export default function LoginForm() {
     const router = useRouter();
 
-    const [form, setForm] = useState({
-        email: "",
-        password: "",
-    });
-
+    const [form, setForm] = useState<AdminLoginFormData>({ email: "", password: "" });
+    const [errors, setErrors] = useState<{ [k: string]: string }>({});
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setForm(prev => ({ ...prev, [name]: value }));
+
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: "" }));
+        }
+    };
+
+    const validateForm = () => {
+        const result = AdminLoginSchema.safeParse(form);
+
+        if (result.success) {
+            setErrors({});
+            return true;
+        }
+
+        const fieldErrors = result.error.flatten().fieldErrors;
+        const formattedErrors: { [k: string]: string } = {};
+
+        for (const key in fieldErrors) {
+            const arr = fieldErrors[key as keyof typeof fieldErrors];
+            if (Array.isArray(arr) && arr.length > 0) {
+                formattedErrors[key] = arr[0];
+            }
+        }
+
+        setErrors(formattedErrors);
+
+        const firstError = Object.values(formattedErrors)[0];
+        if (firstError) toast.error(firstError);
+
+        return false;
+    };
+
+    const handleBlur = (field: string) => {
+        if (form[field as keyof typeof form]) {
+            try {
+                const fieldSchema = AdminLoginSchema.pick({ [field]: true });
+                fieldSchema.parse({ [field]: form[field as keyof typeof form] });
+
+                if (errors[field]) {
+                    setErrors(prev => ({ ...prev, [field]: "" }));
+                }
+            } catch (err: any) {
+                const message = err.errors?.[0]?.message;
+                if (message) {
+                    setErrors(prev => ({ ...prev, [field]: message }));
+                }
+            }
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
+        if (!validateForm()) {
+            setLoading(false);
+            return;
+        }
+
         try {
-            const res = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                toast.error(data.error || "Erro ao fazer login");
-                setLoading(false);
-                return;
-            }
-
+            await LoginService.login(form);
             toast.success("Login realizado com sucesso!");
-
-            setTimeout(() => {
-                router.push("/admin/dashboard");
-            }, 1000);
-
-        } catch (err) {
-            toast.error("Erro inesperado. Tente novamente.");
+            router.push("/admin/dashboard");
+        } catch (err: any) {
+            toast.error(err?.response?.data?.error || "Erro ao fazer login");
         } finally {
             setLoading(false);
         }
@@ -78,14 +113,18 @@ export default function LoginForm() {
                                 <Input
                                     id="email"
                                     name="email"
-                                    type="email"
                                     placeholder="seu@email.com"
                                     value={form.email}
                                     onChange={handleChange}
+                                    onBlur={() => handleBlur("email")}
                                     className="pl-10"
-                                    required
                                 />
                             </div>
+                            {errors.email && (
+                                <p className="text-destructive text-sm flex items-center gap-1 animate-in fade-in duration-200">
+                                    {errors.email}
+                                </p>
+                            )}
                         </div>
 
                         <div className="space-y-2">
@@ -101,8 +140,8 @@ export default function LoginForm() {
                                     placeholder="Sua senha"
                                     value={form.password}
                                     onChange={handleChange}
+                                    onBlur={() => handleBlur("password")}
                                     className="pl-10 pr-10"
-                                    required
                                 />
                                 <button
                                     type="button"
@@ -112,6 +151,11 @@ export default function LoginForm() {
                                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                 </button>
                             </div>
+                            {errors.password && (
+                                <p className="text-destructive text-sm flex items-center gap-1 animate-in fade-in duration-200">
+                                    {errors.password}
+                                </p>
+                            )}
                         </div>
 
                         <Button

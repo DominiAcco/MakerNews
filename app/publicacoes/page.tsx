@@ -8,7 +8,8 @@ import {
   Search,
   FileText,
   AlertCircle,
-  SearchIcon
+  SearchIcon,
+  MoveLeft
 } from "lucide-react";
 import { PublicationService } from "@/services/publicationService";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
@@ -16,6 +17,8 @@ import { CATEGORIES } from "@/consts/categories";
 import { capitalize } from "@/utils/capitalize";
 import { InputGroup, InputGroupInput, InputGroupAddon } from "@/components/ui/input-group";
 import { Pagination } from "@/components/Pagination";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function TodasPublicacoesPage() {
   const [publications, setPublications] = useState<PublicationData[]>([]);
@@ -64,7 +67,7 @@ export default function TodasPublicacoesPage() {
     setCurrentPage(1);
   }, [searchTerm, categoryFilter, publications]);
 
-  
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredPublications.slice(indexOfFirstItem, indexOfLastItem);
@@ -90,12 +93,25 @@ export default function TodasPublicacoesPage() {
       <section className="relative flex justify-center min-h-auto">
         <div className="relative w-[90%] md:w-[80%] flex flex-col mt-6 md:mt-10 z-10">
           <Navbar theme="light" />
+
+          <div className="mb-8">
+            <Link href="/">
+              <Button
+                variant="purple"
+                size="lg"
+                className="mt-15"
+              >
+                <MoveLeft className="size-6" />
+                Voltar para Home
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section className="mt-15 md:mt-30 flex justify-center items-center">
+      <section className="flex justify-center items-center">
         <div className="w-[90%] md:w-[80%]">
-          <div className="mb-10">
+          <div className="mb-20">
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8">
               <div className="lg:w-2/3">
                 <h1 className="text-[#5421CD] font-bold">

@@ -17,6 +17,7 @@ export function PublicationList() {
         const data = await PublicationService.list();
 
         const sortedAndLimited = data
+          .filter(pub => pub.status === "published")
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           .slice(0, 6);
 

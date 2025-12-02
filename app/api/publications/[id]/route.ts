@@ -9,16 +9,6 @@ export async function GET(
   ctx: { params: Promise<{ id: string }> }
 ) {
   try {
-
-    const admin = await requireAdmin();
-
-    if (!admin) {
-      return NextResponse.json(
-        { error: "Não autorizado" },
-        { status: 401 }
-      );
-    }
-    
     const { id } = await ctx.params;
     await connectDB();
 

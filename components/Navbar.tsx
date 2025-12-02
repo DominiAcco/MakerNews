@@ -47,9 +47,9 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
                                         : "after:w-0 hover:after:w-full"
                                 } ${
                                     isLight 
-                                        ? "after:bg-black hover:text-gray-700" 
-                                        : "after:bg-white hover:text-gray-300"
-                                } ${isActive ? (isLight ? "text-gray-800" : "text-gray-200") : ""}`}
+                                        ? "after:bg-black" 
+                                        : "after:bg-white"
+                                }`}
                             >
                                 {item.name}
                             </Link>

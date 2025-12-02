@@ -3,6 +3,7 @@
 import { PublicationData } from "@/types/publication";
 import { AlertCircle, Calendar } from "lucide-react";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 interface PublicationCardProps {
     publication: PublicationData;
@@ -19,7 +20,7 @@ export function PublicationCard({ publication }: PublicationCardProps) {
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     />
                 ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+                    <div className="absolute inset-0 flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200">
                         <div className="text-center">
                             <div className="text-2xl font-bold text-gray-400">
                                 {publication.title.charAt(0)}
@@ -35,7 +36,7 @@ export function PublicationCard({ publication }: PublicationCardProps) {
                 </div>
             </div>
 
-            <div className="p-5 flex flex-col flex-grow">
+            <div className="p-5 flex flex-col grow">
                 <div className="mb-4">
                     <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">
                         {publication.title}
@@ -57,10 +58,12 @@ export function PublicationCard({ publication }: PublicationCardProps) {
 
                     </div>
 
-                    <Button  variant="purple" className=" hover:bg-primary-hover text-white border-radius-md ">
-                        <AlertCircle className="w-4 h-4 mr-2" />
-                        Ver Detalhes
-                    </Button>
+                    <Link href={`/publicacoes/${publication._id}`}>
+                        <Button variant="purple" className="hover:bg-primary-hover text-white border-radius-md">
+                            <AlertCircle className="w-4 h-4 mr-2" />
+                            Ver Detalhes
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </div>
