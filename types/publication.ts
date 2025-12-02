@@ -20,9 +20,15 @@ export type PublicationData = {
 
 export const PublicationSchema = z.object({
     title: z.string().min(1, "Informe o título"),
-    description: z.string().min(1, "Informe a descrição"),
+    description: z
+        .string()
+        .min(1, "Informe a descrição")
+        .max(500, "A descrição não pode ter mais de 500 caracteres"),
     category: z.enum(CATEGORIES, "Selecione uma categoria"),
-    content: z.string().min(1, "Informe o conteúdo"),
+    content: z
+        .string()
+        .min(1, "Informe o conteúdo")
+        .max(30000, "O conteúdo não pode exceder 30.000 caracteres"),
     status: z.enum(["published", "archived"]),
     createdBy: z.object({
         userId: z.string(),
