@@ -21,7 +21,8 @@ Em breve, o Maker News também contará com integração para direcionar os usu�
 - **Tailwind CSS**
 - **ShadCN/UI**
 - **Lucide Icons**
-- **token JWt**
+- **Token JWT**
+- **Cloudinary**
 
 ### **Backend**
 - **Node.js**
@@ -68,6 +69,11 @@ npm install
 4. **Crie o arquivo `.env.local` com suas credenciais MongoDB:**
 ```env
 MONGODB_URI=sua-string-de-conexao
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=seu-nome-do-cloudinary
+NEXT_PUBLIC_CLOUDINARY_API_KEY=sua-chave-de-api
+CLOUDINARY_SECRET_KEY=sua-chave-secreta-de-api
+JWT_SECRET=senha-secreta-gerada-por-openssl (usar comando openssl rand -base64 64 no terminal)
+NEXT_PUBLIC_APP_URL=http://localhost:3000 (Na vercel utilizar link do seu dominio)
 ```
 
 5. **Inicie o servidor de desenvolvimento:**
