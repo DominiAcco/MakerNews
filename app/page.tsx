@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import InfrastructureSection from "@/components/InfrastructureSection";
+import Footer from "@/components/Footer";
 
 type Banner = {
   image: string;
@@ -181,7 +182,10 @@ export default function Home() {
       <section>
         <InfrastructureSection />
       </section>
-      
+      <section>
+        <Footer />
+      </section>
+
 
     </main>
   );
