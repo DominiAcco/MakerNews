@@ -63,7 +63,7 @@ export default async function Page({ params }: PageProps) {
     <main className="mt-6 md:mt-10 flex justify-center items-center">
       <div className="w-[90%] md:w-[80%]">
         <Navbar />
-
+        
         <div className="mb-8">
           <Link href="/publicacoes">
             <Button
@@ -133,11 +133,16 @@ export default async function Page({ params }: PageProps) {
 
         <div className="mt-10 rounded-xl">
           <h2 className="font-bold text-4xl mb-6">Relacionados</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-30">
-            {relatedPublications.map(pub => (
-              <CardPublicationRelated key={pub._id} publication={pub} />
-            ))}
-          </div>
+          {relatedPublications.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-30">
+              {relatedPublications.map(pub => (
+                <CardPublicationRelated key={pub._id} publication={pub} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 text-lg">Nenhum item relacionado encontrado.</p>
+          )}
+
         </div>
       </div>
     </main>
