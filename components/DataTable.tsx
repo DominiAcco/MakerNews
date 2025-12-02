@@ -7,7 +7,8 @@ import {
   flexRender,
   ColumnDef,
 } from "@tanstack/react-table"
-import { Search, ChevronLeft, ChevronRight } from "lucide-react"
+import { Search } from "lucide-react"
+import { Pagination } from "./Pagination"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -77,9 +78,8 @@ export function DataTable<TData, TValue>({
                 table.getRowModel().rows.map((row, index) => (
                   <tr
                     key={row.id}
-                    className={`transition-colors duration-150 hover:bg-gray-50 ${
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                    }`}
+                    className={`transition-colors duration-150 hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
+                      }`}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <td
@@ -98,7 +98,7 @@ export function DataTable<TData, TValue>({
                     className="px-6 py-8 lg:py-12 text-center"
                   >
                     <div className="flex flex-col items-center justify-center text-gray-500">
-                      <div className="text-3xl lg:text-4xl mb-2 lg:mb-3">🔍</div>
+                      <div className="text-3xl lg:text-4xl mb-2 lg:mb-3"><Search/></div>
                       <h3 className="text-base lg:text-lg font-semibold mb-1">Nenhum resultado encontrado</h3>
                       <p className="text-xs lg:text-sm">Tente ajustar os filtros de busca</p>
                     </div>
@@ -110,60 +110,13 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      {currentPage && totalPages && (
-        <div className="flex flex-col xs:flex-row justify-between items-center gap-3 lg:gap-4 px-1">
-          <p className="text-xs lg:text-sm text-gray-600 order-2 xs:order-1">
-            Página <span className="font-semibold text-gray-900">{currentPage}</span> de{" "}
-            <span className="font-semibold text-gray-900">{totalPages}</span>
-          </p>
-
-          <div className="flex items-center gap-3 lg:gap-5">
-            <button
-              onClick={onPreviousPage}
-              disabled={currentPage <= 1}
-              className="flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium text-gray-700"
-            >
-              <ChevronLeft className="h-3 lg:h-4 w-3 lg:w-4" />
-              <span className="hidden xs:inline">Anterior</span>
-            </button>
-
-            <div className="flex items-center gap-2">
-              {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
-                const pageNum = i + 1
-                return (
-                  <button
-                    key={pageNum}
-                    className={`w-7 h-7 lg:w-8 lg:h-8 rounded-lg text-xs lg:text-sm font-medium transition-all ${
-                      currentPage === pageNum
-                        ? 'bg-[#5421CD] text-white shadow-xs'
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                  >
-                    {pageNum}
-                  </button>
-                )
-              })}
-              {totalPages > 0 && (
-                <>
-                  <span className="text-gray-400 text-xs">...</span>
-                  <button className="w-7 h-7 lg:w-8 lg:h-8 rounded-lg text-xs lg:text-sm font-medium text-gray-600 hover:bg-gray-100">
-                    {totalPages}
-                  </button>
-                </>
-              )}
-            </div>
-
-            <button
-              onClick={onNextPage}
-              disabled={currentPage >= totalPages}
-              className="flex items-center gap-1 lg:gap-2 px-3 lg:px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium text-gray-700"
-            >
-              <span className="hidden xs:inline">Próximo</span>
-              <ChevronRight className="h-3 lg:h-4 w-3 lg:w-4" />
-            </button>
-          </div>
-        </div>
-      )}
+      <Pagination
+        currentPage={currentPage!}
+        totalPages={totalPages!}
+        onNextPage={onNextPage!}
+        onPreviousPage={onPreviousPage!}
+      />
+      
     </div>
   )
 }

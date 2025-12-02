@@ -7,6 +7,8 @@ import HomeBanner2 from "@/components/HomeBanner2";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PublicationList } from "@/components/PublicationsList";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Banner = {
   image: string;
@@ -135,12 +137,21 @@ export default function Home() {
       <section className="mt-15 md:mt-30 flex justify-center items-center">
         <div className="w-[90%] md:w-[80%]">
           <PublicationList />
+          <div className="flex flex-col items-center mt-20">
+            <Link href="/publicacoes">
+              <Button
+                variant="purpleGhost"
+                size="lg"
+              >
+                Ver mais publicações
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
       <section className="mt-15 md:mt-30 flex justify-center items-center">
         <div className="w-[90%] md:w-[80%] flex flex-col lg:flex-row justify-between gap-8">
-
           <div>
             <Image
               src="/imageSectionWhatIsMaker.jpg"
@@ -149,7 +160,6 @@ export default function Home() {
               height={360}
               className="rounded-lg w-full h-auto lg:max-w-lg"
             />
-
           </div>
           <div className="w-full lg:w-1/2 flex flex-col justify-center gap-4 md:gap-6">
             <div className="flex flex-col gap-3 md:gap-4">
@@ -160,13 +170,11 @@ export default function Home() {
                 Quem somos e <br className="hidden sm:block" />o que fazemos
               </h2>
             </div>
-
             <p className="text-base sm:text-lg md:text-xl lg:text-xl text-[#333333] leading-relaxed max-w-2xl">
               O Laboratório Maker é um ambiente colaborativo que incentiva a criação, experimentação e desenvolvimento de ideias.
               Aqui, estudantes e comunidade podem explorar tecnologias, aprender fazendo e transformar projetos em soluções reais.
             </p>
           </div>
-
         </div>
       </section>
 
