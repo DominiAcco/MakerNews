@@ -10,6 +10,8 @@ import {
     DialogTitle,
     DialogDescription
 } from "@/components/ui/dialog";
+import { useState } from "react";
+import { Spinner } from "./ui/spinner";
 
 interface DeleteAdminModalProps {
     open: boolean;
@@ -27,8 +29,12 @@ export default function DeleteAdminModal({
     onDeleted
 }: DeleteAdminModalProps) {
 
+    const [isDeleting, setIsDeleting] = useState(false);
+
+
     const handleDelete = async () => {
         try {
+            setIsDeleting(true);
             await AdminService.delete(adminId);
             toast.success("Administrador excluído com sucesso!");
             onDeleted();
@@ -36,6 +42,7 @@ export default function DeleteAdminModal({
             console.error(error);
             toast.error("Erro ao excluir administrador");
         } finally {
+            setIsDeleting(false)
             onClose();
         }
     };
@@ -57,6 +64,7 @@ export default function DeleteAdminModal({
                         type="button"
                         variant="light"
                         onClick={onClose}
+                        disabled={isDeleting}
                     >
                         Cancelar
                     </Button>
@@ -65,8 +73,10 @@ export default function DeleteAdminModal({
                         type="button"
                         variant="destructive"
                         onClick={handleDelete}
+                        disabled={isDeleting}
                     >
-                        Excluir
+                        {isDeleting && <Spinner className="w-4 h-4" />}
+                        {isDeleting ? "Excluindo..." : "Excluir"}
                     </Button>
                 </div>
             </DialogContent>

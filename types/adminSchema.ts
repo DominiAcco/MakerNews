@@ -15,13 +15,12 @@ export const AdminRegisterSchema = z.object({
         .max(100, { message: "Nome muito longo" })
         .regex(/^[a-zA-ZÀ-ÿ\s]+$/, { message: "Nome deve conter apenas letras" }),
 
-    email: z.string()
+    email: z.email({ message: "E-mail inválido" })
         .min(1, { message: "E-mail é obrigatório" })
-        .email({ message: "E-mail inválido" })
         .max(100, { message: "E-mail muito longo" }),
 
     password: z.string()
-        .min(6, { message: "Senha deve ter pelo menos 6 caracteres" })
+        .min(9, { message: "Senha deve ter pelo menos 9 caracteres" })
         .max(100, { message: "Senha muito longa" })
         .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])/,
             {message:"Senha deve conter letra maiúscula, minúscula, número e caractere especial",})
@@ -32,4 +31,10 @@ export const AdminEditSchema = AdminRegisterSchema.pick({
   email: true
 });
 
+export const AdminLoginSchema = z.object({
+  email: AdminRegisterSchema.shape.email,
+  password: AdminRegisterSchema.shape.password,
+});
+
 export type AdminFormData = z.infer<typeof AdminRegisterSchema>;
+export type AdminLoginFormData = z.infer<typeof AdminLoginSchema>;

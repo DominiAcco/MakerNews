@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { PublicationService } from "@/services/publicationService";
 import { PublicationData } from "@/types/publication";
 import { fileUploadService } from "@/services/fileUploadService";
+import { Spinner } from "./ui/spinner";
+import { useState } from "react";
 
 interface DeletePublicationModalProps {
     publication: PublicationData;
@@ -27,9 +29,11 @@ export default function DeletePublicationModal({
     onSuccess
 }: DeletePublicationModalProps) {
 
+    const [isSaving, setIsSaving] = useState(false);
+
     const handleDelete = async () => {
         try {
-
+            setIsSaving(true);
             if (publication.image_url) {
                 await fileUploadService.deleteImage(publication.image_url);
             }
@@ -40,6 +44,8 @@ export default function DeletePublicationModal({
         } catch (err: any) {
             console.error(err);
             toast.error("Erro ao excluir publicação");
+        } finally {
+            setIsSaving(false)
         }
     };
 
@@ -59,6 +65,7 @@ export default function DeletePublicationModal({
                         variant="light"
                         onClick={onClose}
                         className="min-w-30"
+                        disabled={isSaving}
                     >
                         Cancelar
                     </Button>
@@ -67,9 +74,13 @@ export default function DeletePublicationModal({
                         variant="destructive"
                         onClick={handleDelete}
                         className="min-w-30"
+                        disabled={isSaving}
                     >
-                        Excluir
+                       
+                        {isSaving && <Spinner className="w-4 h-4" />}
+                        {isSaving ? "Excluindo..." : " Excluir"}
                     </Button>
+
                 </div>
             </DialogContent>
         </Dialog>
