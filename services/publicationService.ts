@@ -20,7 +20,6 @@ export const PublicationService = {
             content: data.content,
             status: data.status,
             category: data.category,
-            createdBy: data.createdBy,
             image_url: data.image_url,
         });
         return response.data;
@@ -33,7 +32,6 @@ export const PublicationService = {
             content: data.content,
             status: data.status,
             category: data.category,
-            createdBy: data.createdBy,
             image_url: data.image_url
         });
         return response.data;

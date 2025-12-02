@@ -71,7 +71,6 @@ export default function EditPublicationModal({
             content: publication.content,
             status: publication.status,
             category: defaultCategory,
-            createdBy: publication.createdBy,
             image_url: publication.image_url || "",
         },
     });

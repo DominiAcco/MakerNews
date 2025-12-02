@@ -8,11 +8,6 @@ export type PublicationData = {
     content: string;
     category: string;
     status: "published" | "archived";
-    createdBy: {
-        userId: string;
-        name: string;
-        role: string;
-    };
     createdAt: string;
     updatedAt: string;
     image_url?: string,
@@ -30,11 +25,6 @@ export const PublicationSchema = z.object({
         .min(1, "Informe o conteúdo")
         .max(30000, "O conteúdo não pode exceder 30.000 caracteres"),
     status: z.enum(["published", "archived"]),
-    createdBy: z.object({
-        userId: z.string(),
-        name: z.string(),
-        role: z.string(),
-    }),
     image_url: z
         .union([
             z.instanceof(File),

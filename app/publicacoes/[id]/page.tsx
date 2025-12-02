@@ -63,7 +63,7 @@ export default async function Page({ params }: PageProps) {
     <main className="mt-6 md:mt-10 flex justify-center items-center">
       <div className="w-[90%] md:w-[80%]">
         <Navbar />
-        
+
         <div className="mb-8">
           <Link href="/publicacoes">
             <Button
@@ -96,28 +96,28 @@ export default async function Page({ params }: PageProps) {
 
         </div>
 
-        <div className="mb-10 md:mb-12">
-          <div className="relative w-full h-[300px] md:h-[500px] lg:h-[600px] rounded-2xl overflow-hidden shadow-xl">
+        <div className="mb-10 md:mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+
+          <div className="relative w-full h-[350px] md:h-[450px] rounded-2xl overflow-hidden shadow-xl">
             <Image
               src={publication.image_url?.trim() ? publication.image_url : "/notFound.png"}
               alt={publication.title}
               fill
               priority
               quality={75}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
-              className="object-cover transition-transform duration-700 hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-contain bg-gray-50"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
           </div>
-        </div>
 
-        {publication.description && (
-          <div className="mb-10">
-            <p className="text-2xl md:text-3xl text-gray-700 leading-relaxed font-light italic border-l-4 border-purple-500 pl-6 py-3">
-              {publication.description}
-            </p>
-          </div>
-        )}
+          {publication.description && (
+            <div>
+              <p className="text-2xl md:text-3xl text-gray-700 leading-relaxed font-light italic border-l-4 border-purple-500 pl-6 py-3">
+                {publication.description}
+              </p>
+            </div>
+          )}
+        </div>
 
         <article className="prose prose-lg md:prose-xl max-w-none">
           <div className="bg-white rounded-2xl shadow-sm p-6 md:p-10 border border-gray-100">

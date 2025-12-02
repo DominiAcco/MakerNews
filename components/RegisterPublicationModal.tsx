@@ -45,11 +45,6 @@ export default function RegisterPublicationModal({
       content: "",
       status: "published",
       category: undefined,
-      createdBy: {
-        userId: "123",
-        name: "Admin",
-        role: "admin",
-      },
       image_url: ""
     },
   });

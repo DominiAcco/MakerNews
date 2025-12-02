@@ -35,9 +35,6 @@ import { PublicationData } from "@/types/publication";
 import { PublicationService } from "@/services/publicationService";
 import { toast } from "sonner";
 import { getMonthYearFormatted } from "@/utils/date";
-
-import { useRouter } from "next/router";
-import { getAuthUser } from "@/services/authService";
 import { LogoutModal } from "@/components/LogoutModal";
 import Link from "next/link";
 

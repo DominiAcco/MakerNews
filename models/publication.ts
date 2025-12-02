@@ -1,14 +1,5 @@
 import mongoose, { Schema, models } from "mongoose";
 
-const CreatedBySchema = new Schema(
-  {
-    userId: { type: String, required: true },
-    name: { type: String, required: true },
-    role: { type: String, required: true },
-  },
-  { _id: false }
-);
-
 const PublicationSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -20,7 +11,6 @@ const PublicationSchema = new Schema(
       required: true,
       enum: ["published", "archived"],
     },
-    createdBy: { type: CreatedBySchema, required: true },
     image_url: { type: String, required: false },
   },
   { timestamps: true }
