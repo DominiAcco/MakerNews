@@ -20,6 +20,7 @@ const buttonVariants = cva(
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
         purple: "bg-[#5421CD] text-white hover:bg-[#4421AD] cursor-pointer",
+        purpleGhost: "border border-[#5421CD] text-[#5421CD] cursor-pointer",
         light: "bg-[#DBDBDB] text-black hover:bg-[#c4c4c4] cursor-pointer",
         homeButtonLight: "bg-white text-black font-bold hover:cursor-pointer hover:bg-[#5421CD] hover:text-white",
         homeButtonDark: "bg-black text-white font-bold hover:cursor-pointer hover:bg-[#5421CD]"
