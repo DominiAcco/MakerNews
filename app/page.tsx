@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import InfrastructureSection from "@/components/InfrastructureSection";
 import Footer from "@/components/Footer";
+import ContactSection from "@/components/ContactSection";
 
 type Banner = {
   image: string;
@@ -179,9 +180,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       <section>
         <InfrastructureSection />
       </section>
+      <ContactSection />
       <section>
         <Footer />
       </section>

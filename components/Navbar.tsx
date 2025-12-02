@@ -1,9 +1,10 @@
+// components/Navbar.tsx
 "use client";
 
 import { CircuitBoard, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 interface NavbarProps {
     theme?: "light" | "dark";
@@ -13,13 +14,56 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
     const isLight = theme === "light";
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
+    const router = useRouter();
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+    const scrollToContact = (e: React.MouseEvent) => {
+        e.preventDefault();
+        
+        if (pathname !== "/") {
+            router.push("/");
+            
+            setTimeout(() => {
+                const contactSection = document.getElementById("contato");
+                if (contactSection) {
+                    contactSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }, 100);
+            return;
+        }
+        
+        const contactSection = document.getElementById("contato");
+        if (contactSection) {
+            setIsMenuOpen(false);
+            
+            contactSection.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (pathname === "/" && window.location.hash === "#contato") {
+            setTimeout(() => {
+                const contactSection = document.getElementById("contato");
+                if (contactSection) {
+                    contactSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }, 500);
+        }
+    }, [pathname]);
 
     const navItems = [
         { name: "Home", path: "/" },
         { name: "Publicações", path: "/publicacoes" },
-        { name: "Contato", path: "/contato" },
     ];
 
     return (
@@ -56,6 +100,16 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
                             </Link>
                         );
                     })}
+                    <button
+                        onClick={scrollToContact}
+                        className={`relative cursor-pointer after:block after:h-0.5 after:transition-all after:duration-300 after:w-0 hover:after:w-full ${
+                            isLight 
+                                ? "after:bg-black" 
+                                : "after:bg-white"
+                        }`}
+                    >
+                        Contato
+                    </button>
                 </div>
 
                 <button
@@ -90,6 +144,12 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
                                 </Link>
                             );
                         })}
+                        <button
+                            onClick={scrollToContact}
+                            className="py-3 px-4 text-lg font-semibold border-b last:border-b-0 transition-colors text-left hover:bg-gray-100"
+                        >
+                            Contato
+                        </button>
                     </div>
                 </div>
             )}
