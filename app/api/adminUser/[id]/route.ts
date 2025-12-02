@@ -70,10 +70,10 @@ export async function PUT(
     }
 }
 
-
 export async function DELETE(
     req: Request,
-    ctx: { params: Promise<{ id: string }> }) {
+    ctx: { params: Promise<{ id: string }> }
+) {
     try {
         const { id } = await ctx.params;
 
@@ -84,11 +84,16 @@ export async function DELETE(
 
         await connectDB();
 
-        const deleted = await Admin.findByIdAndDelete(id);
+        const totalAdmins = await Admin.countDocuments();
 
-        if (!deleted) {
-            return NextResponse.json({ error: "Administrador não encontrado" }, { status: 404 });
+        if (totalAdmins <= 1) {
+            return NextResponse.json(
+                { error: "Não é possível excluir o último administrador do sistema." },
+                { status: 400 }
+            );
         }
+        
+        await Admin.findByIdAndDelete(id);
 
         return NextResponse.json(
             { message: "Administrador removido com sucesso" },
@@ -97,8 +102,12 @@ export async function DELETE(
 
     } catch (error) {
         console.error("ERRO DELETE ADMIN:", error);
-        return NextResponse.json({ error: "Erro interno no servidor" }, { status: 500 });
+        return NextResponse.json(
+            { error: "Erro interno no servidor" },
+            { status: 500 }
+        );
     }
 }
+
 
 

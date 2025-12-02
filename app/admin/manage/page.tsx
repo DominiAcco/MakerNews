@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { MoveLeft, Plus } from "lucide-react";
 import { AdminService } from "@/services/adminService";
-import RegisterForm from "@/components/Registerpage";
+import RegisterForm from "@/components/RegisterAdmin";
+import Link from "next/link";
 
 export default function ListAdmin() {
     const [admins, setAdmins] = useState<AdminData[]>([]);
@@ -71,8 +72,19 @@ export default function ListAdmin() {
     }
 
     return (
-        <div className="flex justify-center min-h-screen bg-[#F7F4FF] px-4">
-            <main className="w-[80%] mt-20">
+        <div className="flex justify-center min-h-screen bg-[#F7F4FF]">
+            <main className="w-[80%]">
+                   <div className="mb-8 mt-8">
+                            <Link href="/admin/dashboard">
+                                <Button
+                                    variant="purpleGhost"
+                                    size="lg"
+                                >
+                                    <MoveLeft className="size-6" />
+                                    Voltar para Dashboard
+                                </Button>
+                            </Link>
+                        </div>
                 <header className="bg-white rounded-2xl shadow-lg p-6 mb-8 border border-[#AEAEAE] ">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <div>
@@ -95,7 +107,6 @@ export default function ListAdmin() {
                                 <RegisterForm onSuccess={handleSuccess} />
                             </DialogContent>
                         </Dialog>
-
                     </div>
                 </header>
 

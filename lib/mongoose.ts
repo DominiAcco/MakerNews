@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import Admin from "@/models/admin";
+import { hash } from "bcryptjs";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -35,5 +37,31 @@ export async function connectDB() {
 
   cached.conn = await cached.promise;
   globalWithMongoose._mongooseGlobal = cached;
+
+  await createInitialAdmin();
+
   return cached.conn;
+}
+
+
+async function createInitialAdmin() {
+  const totalAdmins = await Admin.countDocuments();
+
+  if (totalAdmins > 0) {
+    return;
+  }
+
+  const DEFAULT_ADMIN = {
+    name: "admin",
+    email: "maker_admin@gmail.com",
+    password: "Maker@123",
+  };
+
+  const hashedPassword = await hash(DEFAULT_ADMIN.password, 10);
+
+  await Admin.create({
+    name: DEFAULT_ADMIN.name,
+    email: DEFAULT_ADMIN.email,
+    password: hashedPassword,
+  });
 }

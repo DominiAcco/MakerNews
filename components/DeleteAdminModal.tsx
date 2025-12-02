@@ -39,8 +39,7 @@ export default function DeleteAdminModal({
             toast.success("Administrador excluído com sucesso!");
             onDeleted();
         } catch (error) {
-            console.error(error);
-            toast.error("Erro ao excluir administrador");
+            toast.error((error as any)?.response?.data?.error || "Erro ao excluir administrador");
         } finally {
             setIsDeleting(false)
             onClose();
