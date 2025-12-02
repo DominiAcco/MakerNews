@@ -103,17 +103,17 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
                 <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <User className="w-8 h-8 text-primary" />
                 </div>
-                <h1 className="text-2xl font-bold text-card-foreground font-montserrat">
+                <h1 className="text-2xl font-bold text-card-foreground">
                     Criar Conta
                 </h1>
-                <p className="text-muted-foreground mt-2 font-lato">
+                <p className="text-muted-foreground mt-2">
                     Preencha os dados para registrar um novo administrador
                 </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="gap-4 flex flex-col">
-                    <label htmlFor="name" className="text-sm font-medium text-card-foreground font-montserrat">
+                    <label htmlFor="name" className="text-sm font-medium text-card-foreground">
                         Nome completo
                     </label>
 
@@ -138,7 +138,7 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
                 </div>
 
                 <div className="gap-4 flex flex-col">
-                    <label htmlFor="email" className="text-sm font-medium text-card-foreground font-montserrat">
+                    <label htmlFor="email" className="text-sm font-medium text-card-foreground">
                         E-mail
                     </label>
                     <div className="relative">
@@ -163,7 +163,7 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
                 </div>
 
                 <div className="gap-4 flex flex-col">
-                    <label htmlFor="password" className="text-sm font-medium text-card-foreground font-montserrat">
+                    <label htmlFor="password" className="text-sm font-medium text-card-foreground">
                         Senha
                     </label>
                     <div className="relative">

@@ -39,7 +39,7 @@ export function LogoutModal() {
 
   return (
     <Dialog>
-      <DialogTrigger className="flex items-center gap-2 px-2 py-2 rounded-md text-#020202-500 hover:text-red-600">
+      <DialogTrigger className="flex items-center gap-2 px-2 py-2 rounded-md text-#020202-500 hover:text-red-600 hover:cursor-pointer">
         <LogOut size={18} />
         <span>Sair</span>
       </DialogTrigger>

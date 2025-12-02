@@ -95,17 +95,17 @@ export default function LoginForm() {
             <div className="w-full max-w-md">
                 <div className="bg-card rounded-xl shadow-lg border border-border p-8 backdrop-blur-sm">
                     <div className="text-center mb-8">
-                        <h1 className="text-2xl font-bold text-card-foreground font-montserrat">
+                        <h1 className="text-2xl font-bold text-card-foreground">
                             Login Administrativo
                         </h1>
-                        <p className="text-muted-foreground mt-2 font-lato">
+                        <p className="text-muted-foreground mt-2">
                             Acesse o painel de publicações
                         </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="space-y-2">
-                            <label htmlFor="email" className="text-sm font-medium text-card-foreground font-montserrat">
+                            <label htmlFor="email" className="text-sm font-medium text-card-foreground">
                                 E-mail
                             </label>
                             <div className="relative">
@@ -128,7 +128,7 @@ export default function LoginForm() {
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="password" className="text-sm font-medium text-card-foreground font-montserrat">
+                            <label htmlFor="password" className="text-sm font-medium text-card-foreground">
                                 Senha
                             </label>
                             <div className="relative">
@@ -161,7 +161,7 @@ export default function LoginForm() {
                         <Button
                             type="submit"
                             disabled={loading}
-                            className="w-full h-11 font-montserrat font-medium transition-all duration-200 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            className="w-full h-11 font-medium transition-all duration-200 bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                         >
                             {loading ? (
                                 <div className="flex items-center gap-2">

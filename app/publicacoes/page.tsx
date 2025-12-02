@@ -19,6 +19,7 @@ import { InputGroup, InputGroupInput, InputGroupAddon } from "@/components/ui/in
 import { Pagination } from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Footer from "@/components/Footer";
 
 export default function TodasPublicacoesPage() {
   const [publications, setPublications] = useState<PublicationData[]>([]);
@@ -218,6 +219,9 @@ export default function TodasPublicacoesPage() {
             </div>
           )}
         </div>
+      </section>
+      <section>
+        <Footer/>
       </section>
     </main>
   );

@@ -1,11 +1,13 @@
 "use client";
 
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { getCategoryColor } from "@/components/colors";
 import { CategoryMetrics } from "@/types/categoryMetrics";
 
 interface Props {
     data: CategoryMetrics[];
+    width?: number;
+    height?: number;
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -61,41 +63,48 @@ const renderCustomizedLabel = ({
     return null;
 };
 
-export default function CategoryChart({ data }: Props) {
+export default function CategoryChart({ 
+    data, 
+    width = 400, 
+    height = 350 
+}: Props) {
+    if (!data || data.length === 0) {
+        return (
+            <div className="flex items-center justify-center h-[350px] w-full bg-gray-50 rounded-lg">
+                <p className="text-gray-500">Nenhum dado disponível</p>
+            </div>
+        );
+    }
+
     return (
-        <div className="w-full h-full min-h-80 bg-linear-to-br  from-gray-50 to-white [svg_*:focus]:outline-none">
-            <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                    <Pie
-                        data={data}
-                        dataKey="percent"
-                        nameKey="category"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius="85%"
-                        innerRadius="35%"
-                        paddingAngle={1}
-                        label={renderCustomizedLabel}
-                        labelLine={false}
-                        animationBegin={0}
-                        animationDuration={800}
-                    >
-                        {data.map((entry, index) => (
-                            <Cell
-                                key={`cell-${index}`}
-                                fill={getCategoryColor(entry.category)}
-                                stroke="#FFFFFF"
-                                strokeWidth={2}
-                                className="hover:opacity-80 transition-opacity cursor-pointer"
-                            />
-                        ))}
-                    </Pie>
-
-                    <Tooltip content={<CustomTooltip />} />
-
-
-                </PieChart>
-            </ResponsiveContainer>
+        <div className="flex justify-center items-center w-full h-[350px] bg-linear-to-br from-gray-50 to-white rounded-lg">
+            <PieChart width={width} height={height}>
+                <Pie
+                    data={data}
+                    dataKey="percent"
+                    nameKey="category"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="80%"
+                    innerRadius="40%"
+                    paddingAngle={2}
+                    label={renderCustomizedLabel}
+                    labelLine={false}
+                    animationBegin={0}
+                    animationDuration={800}
+                >
+                    {data.map((entry, index) => (
+                        <Cell
+                            key={`cell-${index}`}
+                            fill={getCategoryColor(entry.category)}
+                            stroke="#FFFFFF"
+                            strokeWidth={2}
+                            className="hover:opacity-80 transition-opacity cursor-pointer"
+                        />
+                    ))}
+                </Pie>
+                <Tooltip content={<CustomTooltip />} />
+            </PieChart>
         </div>
     );
 }

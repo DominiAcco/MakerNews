@@ -9,7 +9,9 @@ import {
     Plus,
     SearchIcon,
     PieChart,
-    Calendar
+    Calendar,
+    MoveLeft,
+    ShieldUser
 } from "lucide-react";
 import {
     Dialog,
@@ -37,6 +39,7 @@ import { getMonthYearFormatted } from "@/utils/date";
 import { useRouter } from "next/router";
 import { getAuthUser } from "@/services/authService";
 import { LogoutModal } from "@/components/LogoutModal";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -155,30 +158,47 @@ export default function Dashboard() {
                             Gerencie e acompanhe todas as suas publicações
                         </p>
                     </div>
-                    <div className="flex justify-end p-4">
-                        <LogoutModal />
-                    </div>
 
-                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center">
-                        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                            <DialogTrigger asChild>
-                                <Button className="w-full" variant="purple" size="lg">
-                                    Adicionar
-                                    <Plus />
-                                </Button>
-                            </DialogTrigger>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 rounded-lg items-center">
+                        <div className="flex justify-center sm:justify-start lg:justify-end order-3 sm:order-1">
+                            <LogoutModal />
+                        </div>
 
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Cadastro de Publicação</DialogTitle>
-                                    <DialogDescription>Formulário de cadastro de nova publicação.</DialogDescription>
-                                </DialogHeader>
-                                <RegisterPublicationModal
-                                    onClose={() => setIsDialogOpen(false)}
-                                    onSuccess={seekPublications}
-                                />
-                            </DialogContent>
-                        </Dialog>
+                        <Link
+                            href="/admin/manage"
+                            className="order-2 sm:col-span-1"
+                        >
+                            <Button
+                                variant="purpleGhost"
+                                size="lg"
+                                className="w-full justify-center"
+                            >
+                                Gerenciar Admins
+                                <ShieldUser className="ml-2" />
+                            </Button>
+                        </Link>
+
+                        <div className="order-1 sm:order-3">
+                            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                                <DialogTrigger asChild>
+                                    <Button className="w-full" variant="purple" size="lg">
+                                        Adicionar
+                                        <Plus />
+                                    </Button>
+                                </DialogTrigger>
+
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Cadastro de Publicação</DialogTitle>
+                                        <DialogDescription>Formulário de cadastro de nova publicação.</DialogDescription>
+                                    </DialogHeader>
+                                    <RegisterPublicationModal
+                                        onClose={() => setIsDialogOpen(false)}
+                                        onSuccess={seekPublications}
+                                    />
+                                </DialogContent>
+                            </Dialog>
+                        </div>
                     </div>
                 </header>
 
