@@ -64,4 +64,5 @@ async function createInitialAdmin() {
     email: DEFAULT_ADMIN.email,
     password: hashedPassword,
   });
+  console.log("🔥 Admin inicial criado automaticamente!");
 }
