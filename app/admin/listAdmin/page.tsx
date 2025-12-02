@@ -10,8 +10,6 @@ import { Plus } from "lucide-react";
 import { AdminService } from "@/services/adminService";
 import RegisterForm from "@/components/Registerpage";
 
-
-
 export default function ListAdmin() {
     const [admins, setAdmins] = useState<AdminData[]>([]);
 

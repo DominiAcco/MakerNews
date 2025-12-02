@@ -22,20 +22,6 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
         { name: "Contato", path: "/contato" },
     ];
 
-    // Função para mapear nomes para rotas
-    const getRoute = (itemName: string) => {
-        switch (itemName.toLowerCase()) {
-            case "home":
-                return "/";
-            case "publicações":
-                return "/publicacoes";
-            case "contato":
-                return "/contato";
-            default:
-                return "/";
-        }
-    };
-
     return (
         <div className={`relative ${isLight ? "text-black" : "text-white"}`}>
             <div className="flex justify-between items-center">
