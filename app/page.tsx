@@ -9,6 +9,7 @@ import { PublicationList } from "@/components/PublicationsList";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import InfrastructureSection from "@/components/InfrastructureSection";
 
 type Banner = {
   image: string;
@@ -177,6 +178,10 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <section>
+        <InfrastructureSection />
+      </section>
+      
 
     </main>
   );
