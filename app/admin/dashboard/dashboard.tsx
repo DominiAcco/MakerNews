@@ -148,17 +148,20 @@ export default function Dashboard() {
             <main className="w-[80%]">
                 <header className="flex flex-col lg:flex-row lg:justify-between gap-6 mt-8">
                     <div className="flex-1">
-                        <div className="flex">
-                            <Calendar className="inline w-6 h-6 text-[#929292] mr-2" />
-                            <p className="text-lg text-[#929292] mb-2">{todayFormatted}</p>
-                        </div>
+                        <Link href="/" className="flex items-center gap-2 text-[#5421CD] font-bold hover:underline mb-2">
+                            <MoveLeft className="w-5 h-5" />
+                            Voltar Home
+                        </Link>
 
                         <h1 className="text-4xl font-bold mb-2">Publicações</h1>
                         <p className="text-[#5421CD] text-base">
                             Gerencie e acompanhe todas as suas publicações
                         </p>
+                        <div className="flex mt-4">
+                            <Calendar className="inline w-6 h-6 text-[#929292] mr-2" />
+                            <p className="text-lg text-[#929292]">{todayFormatted}</p>
+                        </div>
                     </div>
-
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 rounded-lg items-center">
                         <div className="flex justify-center sm:justify-start lg:justify-end order-3 sm:order-1">
                             <LogoutModal />
@@ -201,6 +204,9 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </header>
+
+
+
 
                 <div className="mb-12">
                     <PublicationsStatus

@@ -5,14 +5,14 @@ import { AdminRegisterSchema } from "@/types/adminSchema";
 import { requireAdmin } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
-
 export async function GET() {
   try {
     await connectDB();
+
     const total = await Admin.countDocuments();
 
     if (total === 0) {
-      console.log("⚠️ Nenhum admin encontrado — liberando acesso temporário.");
+      console.log("Nenhum admin encontrado — liberando acesso temporário.");
     } else {
       const admin = await requireAdmin();
       if (!admin) {
@@ -28,7 +28,6 @@ export async function GET() {
     return NextResponse.json(admins, { status: 200 });
 
   } catch (error) {
-    console.error("ERRO GET ADMINS:", error);
     return NextResponse.json(
       { error: "Erro interno no servidor" },
       { status: 500 }
