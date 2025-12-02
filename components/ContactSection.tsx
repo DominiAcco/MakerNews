@@ -17,15 +17,15 @@ export default function ContactSection() {
   const handlePhoneClick = (phoneNumber: string, isWhatsapp: boolean) => {
     const cleanNumber = phoneNumber.replace(/\D/g, '');
     if (isWhatsapp) {
-      window.open(`https://wa.me/55${cleanNumber}?text=Olá! Gostaria de entrar em contato com o MakerLab.`, '_blank');
+      window.open(`https://wa.me/55${cleanNumber}?text=Olá! Gostaria de entrar em contato com o MakerNews.`, '_blank');
     } else {
       window.open(`tel:${cleanNumber}`, '_blank');
     }
   };
 
   const handleEmailClick = (email: string) => {
-    const subject = encodeURIComponent('Contato MakerLab');
-    const body = encodeURIComponent('Olá, gostaria de entrar em contato com o MakerLab.');
+    const subject = encodeURIComponent('Contato MakerNews');
+    const body = encodeURIComponent('Olá, gostaria de entrar em contato com o MakerNews.');
     window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`, '_blank');
   };
 
@@ -176,7 +176,7 @@ export default function ContactSection() {
                     Conheça Nossa Loja
                   </h4>
                   <p className="text-gray-600">
-                    Visite a loja oficial do MakerLab para adquirir produtos e fazer orçamentos .
+                    Visite a loja oficial do MakerNews para adquirir produtos e fazer orçamentos .
                   </p>
                 </div>
 
@@ -189,7 +189,7 @@ export default function ContactSection() {
                       <div className="flex-1">
                         <h5 className="font-semibold text-gray-900">Loja Oficial</h5>
                         <p className="text-sm text-gray-600">
-                          Compre produtos, componentes e kits exclusivos do MakerLab
+                          Compre produtos, componentes e kits exclusivos do MakerNews
                         </p>
                       </div>
                     </div>

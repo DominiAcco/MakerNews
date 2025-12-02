@@ -76,7 +76,7 @@ export default function Navbar({ theme = "light" }: NavbarProps) {
                         className="w-8 h-8 sm:w-12 sm:h-12"
                     />
                     <p className="font-bold text-2xl sm:text-4xl">
-                        Maker<span className="text-[#5421CD]">Lab</span>
+                        Maker<span className="text-[#5421CD]">News</span>
                     </p>
 
                 </Link>
