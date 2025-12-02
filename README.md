@@ -21,6 +21,7 @@ Em breve, o Maker News também contará com integração para direcionar os usu�
 - **Tailwind CSS**
 - **ShadCN/UI**
 - **Lucide Icons**
+- **token JWt**
 
 ### **Backend**
 - **Node.js**
