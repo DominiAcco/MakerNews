@@ -8,16 +8,20 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const admin = await requireAdmin();
-
-    if (!admin) {
-      return NextResponse.json(
-        { error: "Não autorizado" },
-        { status: 401 }
-      );
-    }
-
     await connectDB();
+    const total = await Admin.countDocuments();
+
+    if (total === 0) {
+      console.log("⚠️ Nenhum admin encontrado — liberando acesso temporário.");
+    } else {
+      const admin = await requireAdmin();
+      if (!admin) {
+        return NextResponse.json(
+          { error: "Não autorizado" },
+          { status: 401 }
+        );
+      }
+    }
 
     const admins = await Admin.find().select("-password");
 
