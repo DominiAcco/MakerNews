@@ -12,14 +12,7 @@ const items = [
 export default function InfrastructureSection() {
   return (
     <section className="mt-24 mb-32 flex justify-center bg-gray-50 py-16">
-      {/* CORREÇÃO DE ALINHAMENTO:
-         Alterado de md:w-[85%] para md:w-[80%] para bater exatamente 
-         com o padrão do seu Home.tsx. 
-         Removi o max-w-7xl para garantir que ele respeite apenas a porcentagem da tela.
-      */}
       <div className="w-[90%] md:w-[80%] flex flex-col lg:flex-row gap-12 items-start">
-        
-        {/* LADO ESQUERDO - Texto + Botões da Lista */}
         <div className="w-full lg:w-1/3 flex flex-col gap-8">
           <div>
             <h3 className="text-4xl font-bold text-[#5421CD] mb-4">
@@ -62,14 +55,12 @@ export default function InfrastructureSection() {
           </div>
         </div>
 
-        {/* LADO DIREITO - Grade de 4 Imagens */}
         <div className="w-full lg:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6">
           {items.map((it) => (
             <div
               key={it.id}
               className="group relative h-64 w-full rounded-2xl overflow-hidden shadow-lg border-4 border-white hover:shadow-xl transition-shadow duration-300"
             >
-              {/* Badge com o Número */}
               <div className="absolute top-4 right-4 z-20 w-12 h-12 bg-[#5421CD] text-white flex items-center justify-center rounded-full font-bold text-lg shadow-lg border-2 border-white">
                 {it.id}
               </div>
