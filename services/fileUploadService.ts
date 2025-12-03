@@ -2,20 +2,22 @@ import axios from "axios";
 
 export const fileUploadService = {
   uploadImage: async (file: File): Promise<string> => {
+    const sig = await axios.post("/api/fileUpload");
+    const { timestamp, signature, apiKey, cloudName, folder } = sig.data;
+
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("folderName", "publications");
+    formData.append("api_key", apiKey);
+    formData.append("timestamp", timestamp);
+    formData.append("signature", signature);
+    formData.append("folder", folder);
 
-    const { data } = await axios.post("/api/fileUpload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    if (!data?.res?.secure_url) {
-      throw new Error("Erro ao enviar imagem para o Cloudinary");
-    }
+    const upload = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      formData
+    );
 
-    return data.res.secure_url;
+    return upload.data.secure_url;
   },
 
   deleteImage: async (imageUrl: string) => {
@@ -23,5 +25,4 @@ export const fileUploadService = {
       data: { imageUrl }
     });
   }
-
 };

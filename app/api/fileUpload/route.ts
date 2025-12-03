@@ -8,7 +8,6 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_SECRET_KEY,
 });
 
-
 function extractPublicId(url: string): string | null {
     if (!url) return null;
 
@@ -21,56 +20,26 @@ function extractPublicId(url: string): string | null {
     return `${folder}/${file.split(".")[0]}`;
 }
 
-export async function POST(req: NextRequest) {
-    try {
-
-        const admin = await requireAdmin();
-
-        if (!admin) {
-            return NextResponse.json(
-                { error: "Não autorizado" },
-                { status: 401 }
-            );
-        }
-
-        const formData = await req.formData();
-        const file = formData.get("file") as File | null;
-        const folderName = formData.get("folderName") as string
-
-        if (!file) {
-            NextResponse.json({
-                msg: "File not found",
-                statusCode: 404,
-            })
-        } else {
-            const bytes = await file.arrayBuffer();
-            const buffer = Buffer.from(bytes);
-            const res = await new Promise<any>((res, rej) => {
-                const uploadStream = cloudinary.uploader.upload_stream(
-                    {
-                        folder: folderName,
-                    },
-                    (error, result) => {
-                        if (error) rej(error);
-                        else res(result as any);
-                    }
-                )
-                uploadStream.end(buffer);
-            })
-
-            return NextResponse.json({
-                msg: "File upload to cloudinary",
-                res,
-                statusCode: 200,
-            })
-        }
+export async function POST() {
+    const admin = await requireAdmin();
+    if (!admin) {
+        return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
-    catch (error) {
-        return NextResponse.json({
-            msg: "Error in fileupload route",
-            statusCode: 500,
-        })
-    }
+
+    const timestamp = Math.floor(Date.now() / 1000);
+
+    const signature = cloudinary.utils.api_sign_request(
+        { timestamp, folder: "publications" },
+        process.env.CLOUDINARY_SECRET_KEY!
+    );
+
+    return NextResponse.json({
+        timestamp,
+        signature,
+        apiKey: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+        cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        folder: "publications"
+    });
 }
 
 export async function DELETE(req: NextRequest) {
