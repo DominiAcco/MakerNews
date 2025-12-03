@@ -161,6 +161,7 @@ export default function Home() {
               alt="Imagem explicativa"
               width={500}
               height={360}
+              loading="eager"
               className="rounded-lg w-full h-auto lg:max-w-lg"
             />
           </div>

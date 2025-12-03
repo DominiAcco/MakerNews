@@ -17,7 +17,11 @@ export const fileUploadService = {
       formData
     );
 
-    return upload.data.secure_url;
+    const imageUrl: string = upload.data.secure_url;
+
+    const optimizedUrl = imageUrl.replace("/upload/", "/upload/f_auto,q_auto/");
+
+    return optimizedUrl;
   },
 
   deleteImage: async (imageUrl: string) => {

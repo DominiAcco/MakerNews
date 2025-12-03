@@ -26,24 +26,22 @@ export default function InfrastructureSection() {
 
           <div className="flex flex-col gap-5">
             {items.map((it, index) => {
-              const isPurple = index % 2 !== 0; 
+              const isPurple = index % 2 !== 0;
 
               return (
                 <div
                   key={it.id}
                   className={`flex items-center gap-5 w-full rounded-full px-6 py-4 shadow-sm transition-all hover:scale-[1.02] border-2 
-                    ${
-                      isPurple
-                        ? "bg-[#5421CD] border-[#5421CD] text-white" 
-                        : "bg-white border-[#5421CD] text-[#5421CD]" 
+                    ${isPurple
+                      ? "bg-[#5421CD] border-[#5421CD] text-white"
+                      : "bg-white border-[#5421CD] text-[#5421CD]"
                     }`}
                 >
                   <div
                     className={`w-10 h-10 flex items-center justify-center rounded-full font-bold text-lg 
-                      ${
-                        isPurple
-                          ? "bg-white text-[#5421CD]" 
-                          : "bg-[#5421CD] text-white"
+                      ${isPurple
+                        ? "bg-white text-[#5421CD]"
+                        : "bg-[#5421CD] text-white"
                       }`}
                   >
                     {it.id}
@@ -66,7 +64,7 @@ export default function InfrastructureSection() {
               </div>
 
               <div className="absolute inset-0 bg-gray-100/50" />
-              
+
               <Image
                 src={it.img}
                 alt={it.title}
@@ -74,8 +72,8 @@ export default function InfrastructureSection() {
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+              <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
           ))}
         </div>

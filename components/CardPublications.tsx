@@ -4,7 +4,7 @@ import { PublicationData } from "@/types/publication";
 import { AlertCircle, Calendar } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
-
+import Image from "next/image";
 interface PublicationCardProps {
     publication: PublicationData;
 }
@@ -12,19 +12,22 @@ interface PublicationCardProps {
 export function PublicationCard({ publication }: PublicationCardProps) {
     return (
         <div className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-shadow duration-300">
-            <div className="relative h-48 overflow-hidden bg-gray-100">
+            <div className="relative h-48 bg-gray-100">
+
                 {publication.image_url ? (
-                    <img
+                    <Image
                         src={publication.image_url}
                         alt={publication.title}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        loading="lazy"
+                        quality={75}
+                        className="object-cover hover:scale-105 transition-transform duration-500"
                     />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-linear-to-br from-gray-100 to-gray-200">
-                        <div className="text-center">
-                            <div className="text-2xl font-bold text-gray-400">
-                                {publication.title.charAt(0)}
-                            </div>
+                        <div className="text-2xl font-bold text-gray-400">
+                            {publication.title.charAt(0)}
                         </div>
                     </div>
                 )}

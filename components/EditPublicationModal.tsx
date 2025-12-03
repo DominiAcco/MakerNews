@@ -23,6 +23,7 @@ import {
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
@@ -39,6 +40,7 @@ import { validateImage } from "@/utils/imageUtils";
 import { Upload, Trash2 } from "lucide-react";
 import { fileUploadService } from "@/services/fileUploadService";
 import { Spinner } from "./ui/spinner";
+import Image from "next/image";
 
 interface EditPublicationModalProps {
     publication: PublicationData;
@@ -135,6 +137,7 @@ export default function EditPublicationModal({
             <DialogContent className="sm:max-w-[500px] w-full">
                 <DialogHeader>
                     <DialogTitle>Editar Publicação</DialogTitle>
+                    <DialogDescription></DialogDescription>
                 </DialogHeader>
 
                 <Form {...methods}>
@@ -217,19 +220,31 @@ export default function EditPublicationModal({
 
                                         {(previewUrl || selectedFile) && (
                                             <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                                                <img
-                                                    src={selectedFile ? URL.createObjectURL(selectedFile) : previewUrl}
-                                                    alt="Preview"
-                                                    className="w-16 h-16 rounded object-cover"
-                                                />
+
+                                                <div className="relative w-16 h-16">
+                                                    <Image
+                                                        src={selectedFile ? URL.createObjectURL(selectedFile) : previewUrl}
+                                                        alt="Preview"
+                                                        fill
+                                                        sizes="64px"
+                                                        loading="lazy"
+                                                        quality={75}
+                                                        className="object-cover rounded"
+                                                        
+                                                    />
+                                                </div>
+
                                                 <div className="flex-1">
                                                     {selectedFile && (
                                                         <>
                                                             <p className="text-sm font-medium text-gray-900">{selectedFile.name}</p>
-                                                            <p className="text-xs text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                                                            <p className="text-xs text-gray-500">
+                                                                {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                                                            </p>
                                                         </>
                                                     )}
                                                 </div>
+
                                                 <button
                                                     type="button"
                                                     onClick={() => {
@@ -244,6 +259,7 @@ export default function EditPublicationModal({
                                                 </button>
                                             </div>
                                         )}
+
                                     </div>
 
                                     <FormMessage />

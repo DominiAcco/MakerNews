@@ -23,6 +23,7 @@ import { fileUploadService } from "@/services/fileUploadService";
 import { Upload, Trash2 } from "lucide-react";
 import { Spinner } from "./ui/spinner";
 import { validateImage } from "@/utils/imageUtils";
+import Image from "next/image";
 
 interface RegisterPublicationFormProps {
   onClose: () => void;
@@ -176,11 +177,18 @@ export default function RegisterPublicationModal({
                 {selectedFile && (
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     {selectedFile?.type?.startsWith("image/") && (
-                      <img
-                        src={URL.createObjectURL(selectedFile)}
-                        alt="Preview"
-                        className="w-16 h-16 rounded object-cover"
-                      />
+                      <div className="relative w-16 h-16">
+                        <Image
+                          src={URL.createObjectURL(selectedFile)}
+                          alt="Preview"
+                          fill
+                          sizes="64px"
+                          loading="lazy"
+                          quality={75}
+                          className="object-cover rounded"
+                        />
+                      </div>
+
                     )}
                     <div className="flex-1">
                       <p className="text-sm font-medium text-gray-900">{selectedFile.name}</p>
