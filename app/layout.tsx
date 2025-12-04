@@ -16,7 +16,7 @@ const montserrat = Montserrat({
 
 export const metadata = {
   title: "MakerNews",
-  description: "Descrição do site",
+  description: "Conheça nosso espaço Maker!",
   icons: {
     icon: "/makerIcon.svg",
   },
