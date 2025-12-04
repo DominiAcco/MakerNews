@@ -89,6 +89,50 @@ http://localhost:3000
 
 ---
 
+##  Como hospedar imagens na Cloudinary
+
+Para adicionar imagens nas publicações é necessário configurar um ambiente na plataforma `Cloudinary`
+
+1. **Acesse o site crie uma conta e faça `login`:**
+```bash
+https://cloudinary.com
+```
+<img width="1906" height="897" alt="image" src="https://github.com/user-attachments/assets/1e477e6d-de05-4025-b591-11099bfd45dd" />
+
+---
+
+2. **Vá até `settings`**
+<img width="1895" height="858" alt="image" src="https://github.com/user-attachments/assets/bda84f80-fdc1-4a78-9eb4-1ea6b76510ae" />
+
+---
+
+4. **Vá até `upload` e depois clique em `Add Upload preset`**
+<img width="1915" height="784" alt="image" src="https://github.com/user-attachments/assets/6a23049b-b193-4e83-88b2-0d65954eebd5" />
+
+---
+
+6. **Defina um `nome` em `Upload preset name` e coloque `Unsigned` em `Signed mode` depois clique no botão `Save`**
+<img width="1919" height="906" alt="image" src="https://github.com/user-attachments/assets/cb8c61dd-fee4-47c2-b1a0-f4851864157e" />
+
+---
+
+8. **Depois vá até `API Keys`**
+  *  Copie o código do `Cloud name`
+  *  Copie o código de `API Key`
+  *  Copie o código do `API Secret` (Clique no olho destacado em azul e será enviado um e-mail de confirmação para seu e-mail cadastrado para ter aceso a chave secreta)
+<img width="1896" height="916" alt="image" src="https://github.com/user-attachments/assets/0adfbf06-9baf-4b32-b9a5-c08e474346cf" />
+
+---
+    
+6. **Agora no código dentro do `.env.local` adicione:**
+```
+ NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=Cloud-name
+ NEXT_PUBLIC_CLOUDINARY_API_KEY=API-Key
+ CLOUDINARY_SECRET_KEY=API-Secret
+```
+
+---
+
 ##  Versão hospedada (Vercel)
 
 Você também pode acessar o projeto diretamente online:
