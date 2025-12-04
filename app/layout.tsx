@@ -14,6 +14,14 @@ const montserrat = Montserrat({
   weight: ["400", "600", "700"],
 });
 
+export const metadata = {
+  title: "MakerNews",
+  description: "Descrição do site",
+  icons: {
+    icon: "/makerIcon.svg",
+  },
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
