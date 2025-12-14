@@ -21,13 +21,13 @@ Em breve, o Maker News também contará com integração para direcionar os usu�
 - **Tailwind CSS**
 - **ShadCN/UI**
 - **Lucide Icons**
-- **Token JWT**
 - **Cloudinary**
 
 ### **Backend**
 - **Node.js**
 - **Next.js API Routes**
 - **MongoDB + Mongoose**
+- - **Token JWT**
 
 ### **Outros**
 - Deploy: **Vercel**
